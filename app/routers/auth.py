@@ -7,9 +7,12 @@ router = APIRouter()
 
 @router.post("/register")
 def register(user: UserRegister):
-    registered_user = register_user(user)
+    result = register_user(user)
+
+    if "error" in result:
+        return result
 
     return {
         "message": "User registered successfully",
-        "data": registered_user
+        "data": result
     }
