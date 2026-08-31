@@ -1,3 +1,5 @@
+import bcrypt
+
 from fastapi import HTTPException, status
 
 from app.models.user import UserRegister
@@ -23,12 +25,21 @@ def register_user(user: UserRegister):
             detail="Email sudah terdaftar"
         )
 
+    hashed_password = bcrypt.hashpw(
+        user.password.encode("utf-8"),
+        bcrypt.gensalt()
+    )
+
     cursor.execute(
         """
         INSERT INTO users (name, email, password)
         VALUES (?, ?, ?)
         """,
-        (user.name, user.email, user.password)
+        (
+            user.name,
+            user.email,
+            hashed_password
+        )
     )
 
     connection.commit()
