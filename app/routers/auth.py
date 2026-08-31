@@ -9,9 +9,6 @@ router = APIRouter()
 def register(user: UserRegister):
     result = register_user(user)
 
-    if "error" in result:
-        return result
-
     return {
         "message": "User registered successfully",
         "data": result

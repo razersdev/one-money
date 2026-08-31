@@ -1,3 +1,5 @@
+from fastapi import HTTPException, status
+
 from app.models.user import UserRegister
 from app.database.connection import get_connection
 
@@ -16,9 +18,10 @@ def register_user(user: UserRegister):
 
     if existing_user:
         connection.close()
-        return {
-            "error": "Email sudah terdaftar"
-        }
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Email sudah terdaftar"
+        )
 
     cursor.execute(
         """
