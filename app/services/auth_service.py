@@ -4,6 +4,7 @@ from fastapi import HTTPException, status
 
 from app.models.user import UserRegister, UserLogin
 from app.database.connection import get_connection
+from app.utils.jwt_handler import create_access_token
 
 
 def register_user(user: UserRegister):
@@ -86,7 +87,14 @@ def login_user(user: UserLogin):
 
     connection.close()
 
+    access_token = create_access_token(
+        {
+            "email": user.email
+        }
+    )
+
     return {
         "message": "Login berhasil",
-        "email": user.email
+        "access_token": access_token,
+        "token_type": "bearer"
     }
