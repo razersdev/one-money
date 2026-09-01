@@ -2,9 +2,16 @@
 
 One Money adalah aplikasi personal finance management untuk membantu pengguna mengelola keuangan.
 
-## Features
+## Current Features
 
+### Authentication
 - User registration
+- Password hashing with bcrypt
+- User login
+- JWT authentication
+- Protected endpoint
+
+### Upcoming Features
 - Transaction management
 - Category management
 - Budget management
@@ -17,6 +24,16 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 - FastAPI
 - SQLite
 - Pydantic
+- bcrypt
+- JWT
+
+## API Endpoints
+
+### Authentication
+
+- `POST /register`
+- `POST /login`
+- `GET /me` 
 
 ## Project Status
 
