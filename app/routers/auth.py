@@ -1,6 +1,7 @@
 from fastapi import APIRouter
-from app.models.user import UserRegister
-from app.services.auth_service import register_user
+
+from app.models.user import UserRegister, UserLogin
+from app.services.auth_service import register_user, login_user
 
 router = APIRouter()
 
@@ -13,3 +14,10 @@ def register(user: UserRegister):
         "message": "User registered successfully",
         "data": result
     }
+
+
+@router.post("/login")
+def login(user: UserLogin):
+    result = login_user(user)
+
+    return result
