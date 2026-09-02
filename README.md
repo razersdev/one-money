@@ -5,14 +5,22 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 ## Current Features
 
 ### Authentication
+
 - User registration
 - Password hashing with bcrypt
 - User login
 - JWT authentication
-- Protected endpoint
+- Protected endpoints
 
-### Upcoming Features
-- Transaction management
+### Transaction Management
+
+- Create transaction
+- Protected transaction endpoint
+- Transaction automatically linked to authenticated user
+
+## Upcoming Features
+
+- View transactions
 - Category management
 - Budget management
 - Dashboard
@@ -33,7 +41,11 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 
 - `POST /register`
 - `POST /login`
-- `GET /me` 
+- `GET /me`
+
+### Transactions
+
+- `POST /transactions`
 
 ## Project Status
 
