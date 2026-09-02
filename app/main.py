@@ -1,12 +1,17 @@
 from fastapi import FastAPI
+
 from app.routers import auth
+from app.routers import transaction
+
 from app.database.init_db import init_db
+
 
 app = FastAPI()
 
 init_db()
 
 app.include_router(auth.router)
+app.include_router(transaction.router)
 
 
 @app.get("/")

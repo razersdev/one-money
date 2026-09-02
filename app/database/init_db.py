@@ -6,6 +6,7 @@ def init_db():
 
     cursor = connection.cursor()
 
+    # Tabel users
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,5 +16,23 @@ def init_db():
         )
     """)
 
+    # Tabel transactions
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            type TEXT NOT NULL,
+            amount REAL NOT NULL,
+            description TEXT,
+            category TEXT NOT NULL,
+            created_at TEXT NOT NULL,
+
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """)
+
     connection.commit()
     connection.close()
+
+
+init_db()
