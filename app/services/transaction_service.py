@@ -42,3 +42,45 @@ def create_transaction(user_id: int, transaction: TransactionCreate):
         "description": transaction.description,
         "category": transaction.category
     }
+
+
+def get_transactions(user_id: int):
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+            id,
+            user_id,
+            type,
+            amount,
+            description,
+            category,
+            created_at
+        FROM transactions
+        WHERE user_id = ?
+        ORDER BY created_at DESC
+        """,
+        (user_id,)
+    )
+
+    transactions = cursor.fetchall()
+
+    connection.close()
+
+    result = []
+
+    for transaction in transactions:
+        result.append({
+            "id": transaction[0],
+            "user_id": transaction[1],
+            "type": transaction[2],
+            "amount": transaction[3],
+            "description": transaction[4],
+            "category": transaction[5],
+            "created_at": transaction[6]
+        })
+
+    return result
