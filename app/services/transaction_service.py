@@ -128,3 +128,30 @@ def update_transaction(
         "description": transaction.description,
         "category": transaction.category
     }
+
+
+def delete_transaction(user_id: int, transaction_id: int):
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        DELETE FROM transactions
+        WHERE id = ?
+        AND user_id = ?
+        """,
+        (
+            transaction_id,
+            user_id
+        )
+    )
+
+    connection.commit()
+
+    connection.close()
+
+    return {
+        "id": transaction_id,
+        "message": "Transaction deleted"
+    }
