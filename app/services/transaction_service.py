@@ -84,3 +84,47 @@ def get_transactions(user_id: int):
         })
 
     return result
+
+
+def update_transaction(
+    user_id: int,
+    transaction_id: int,
+    transaction: TransactionCreate
+):
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        UPDATE transactions
+        SET
+            type = ?,
+            amount = ?,
+            description = ?,
+            category = ?
+        WHERE id = ?
+        AND user_id = ?
+        """,
+        (
+            transaction.type,
+            transaction.amount,
+            transaction.description,
+            transaction.category,
+            transaction_id,
+            user_id
+        )
+    )
+
+    connection.commit()
+
+    connection.close()
+
+    return {
+        "id": transaction_id,
+        "user_id": user_id,
+        "type": transaction.type,
+        "amount": transaction.amount,
+        "description": transaction.description,
+        "category": transaction.category
+    }
