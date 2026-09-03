@@ -6,7 +6,8 @@ from app.services.transaction_service import (
     create_transaction,
     get_transactions,
     update_transaction,
-    delete_transaction
+    delete_transaction,
+    get_filtered_transactions
 )
 from app.utils.jwt_handler import verify_access_token
 from app.database.connection import get_connection
@@ -61,6 +62,8 @@ def add_transaction(
 
 @router.get("/transactions")
 def read_transactions(
+    transaction_type: str = None,
+    category: str = None,
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
 
@@ -89,7 +92,11 @@ def read_transactions(
 
     user_id = user[0]
 
-    transactions = get_transactions(user_id)
+    transactions = get_filtered_transactions(
+        user_id,
+        transaction_type,
+        category
+    )
 
     return {
         "message": "Transactions retrieved successfully",
