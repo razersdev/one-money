@@ -15,16 +15,24 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 ### Transaction Management
 
 - Create transaction
-- Protected transaction endpoint
+- View transactions
+- Update transaction
+- Delete transaction
 - Transaction automatically linked to authenticated user
+- Filter transactions by type
+- Filter transactions by category
+- Combined filtering by type and category
+- Case-insensitive filtering
 
 ## Upcoming Features
 
-- View transactions
 - Category management
 - Budget management
 - Dashboard
 - Financial reports
+- Validation & error handling
+- Testing
+- Documentation & deployment
 
 ## Tech Stack
 
@@ -46,7 +54,23 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 ### Transactions
 
 - `POST /transactions`
+- `GET /transactions`
+- `PUT /transactions/{transaction_id}`
+- `DELETE /transactions/{transaction_id}`
 
 ## Project Status
 
 Currently under development.
+
+### Backend Progress
+
+- Authentication — Complete
+- Transaction CRUD — Complete
+- Transaction Filtering — Complete
+- Category System — Upcoming
+- Budget System — Upcoming
+- Dashboard Logic — Upcoming
+- Financial Reports — Upcoming
+- Validation & Error Handling — Upcoming
+- Testing — Upcoming
+- Documentation & Deployment — Upcoming
