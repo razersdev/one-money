@@ -24,9 +24,16 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 - Combined filtering by type and category
 - Case-insensitive filtering
 
+### Category Management
+
+- Create category
+- View categories
+- Update category
+- Delete category
+- Categories automatically linked to authenticated user
+
 ## Upcoming Features
 
-- Category management
 - Budget management
 - Dashboard
 - Financial reports
@@ -58,6 +65,13 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 - `PUT /transactions/{transaction_id}`
 - `DELETE /transactions/{transaction_id}`
 
+### Categories
+
+- `POST /categories`
+- `GET /categories`
+- `PUT /categories/{category_id}`
+- `DELETE /categories/{category_id}`
+
 ## Project Status
 
 Currently under development.
@@ -67,7 +81,7 @@ Currently under development.
 - Authentication — Complete
 - Transaction CRUD — Complete
 - Transaction Filtering — Complete
-- Category System — Upcoming
+- Category System — Complete
 - Budget System — Upcoming
 - Dashboard Logic — Upcoming
 - Financial Reports — Upcoming
