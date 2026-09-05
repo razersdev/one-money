@@ -32,9 +32,16 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 - Delete category
 - Categories automatically linked to authenticated user
 
+### Budget Management
+
+- Create budget
+- View budgets
+- Update budget
+- Delete budget
+- Budgets automatically linked to authenticated user
+
 ## Upcoming Features
 
-- Budget management
 - Dashboard
 - Financial reports
 - Validation & error handling
@@ -72,6 +79,13 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 - `PUT /categories/{category_id}`
 - `DELETE /categories/{category_id}`
 
+### Budgets
+
+- `POST /budgets`
+- `GET /budgets`
+- `PUT /budgets/{budget_id}`
+- `DELETE /budgets/{budget_id}`
+
 ## Project Status
 
 Currently under development.
@@ -82,7 +96,7 @@ Currently under development.
 - Transaction CRUD — Complete
 - Transaction Filtering — Complete
 - Category System — Complete
-- Budget System — Upcoming
+- Budget System — Complete
 - Dashboard Logic — Upcoming
 - Financial Reports — Upcoming
 - Validation & Error Handling — Upcoming
