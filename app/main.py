@@ -4,6 +4,7 @@ from app.routers import auth
 from app.routers import transaction
 from app.routers import category
 from app.routers import budget
+from app.routers import dashboard
 
 from app.database.init_db import init_db
 
@@ -16,6 +17,7 @@ app.include_router(auth.router)
 app.include_router(transaction.router)
 app.include_router(category.router)
 app.include_router(budget.router)
+app.include_router(dashboard.router)
 
 
 @app.get("/")
