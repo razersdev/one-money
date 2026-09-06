@@ -40,9 +40,15 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 - Delete budget
 - Budgets automatically linked to authenticated user
 
+### Dashboard
+
+- Total income
+- Total expense
+- Balance calculation
+- Expense summary by category
+
 ## Upcoming Features
 
-- Dashboard
 - Financial reports
 - Validation & error handling
 - Testing
@@ -86,6 +92,10 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 - `PUT /budgets/{budget_id}`
 - `DELETE /budgets/{budget_id}`
 
+### Dashboard
+
+- `GET /dashboard`
+
 ## Project Status
 
 Currently under development.
@@ -97,7 +107,7 @@ Currently under development.
 - Transaction Filtering — Complete
 - Category System — Complete
 - Budget System — Complete
-- Dashboard Logic — Upcoming
+- Dashboard Logic — Complete
 - Financial Reports — Upcoming
 - Validation & Error Handling — Upcoming
 - Testing — Upcoming
