@@ -47,9 +47,17 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 - Balance calculation
 - Expense summary by category
 
+### Financial Reports
+
+- Financial report by date range
+- Total income by period
+- Total expense by period
+- Balance by period
+- Income summary by category
+- Expense summary by category
+
 ## Upcoming Features
 
-- Financial reports
 - Validation & error handling
 - Testing
 - Documentation & deployment
@@ -96,6 +104,10 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 
 - `GET /dashboard`
 
+### Financial Reports
+
+- `GET /reports`
+
 ## Project Status
 
 Currently under development.
@@ -108,7 +120,7 @@ Currently under development.
 - Category System — Complete
 - Budget System — Complete
 - Dashboard Logic — Complete
-- Financial Reports — Upcoming
+- Financial Reports — Complete
 - Validation & Error Handling — Upcoming
 - Testing — Upcoming
 - Documentation & Deployment — Upcoming
