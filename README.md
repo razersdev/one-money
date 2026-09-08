@@ -56,9 +56,20 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 - Income summary by category
 - Expense summary by category
 
+### Validation & Error Handling
+
+- Transaction amount validation
+- Transaction type validation
+- Transaction description validation
+- Transaction category validation
+- Category name validation
+- Budget amount validation
+- Resource not found handling
+- User not found handling
+- HTTP 404 error responses
+
 ## Upcoming Features
 
-- Validation & error handling
 - Testing
 - Documentation & deployment
 
@@ -121,6 +132,6 @@ Currently under development.
 - Budget System — Complete
 - Dashboard Logic — Complete
 - Financial Reports — Complete
-- Validation & Error Handling — Upcoming
+- Validation & Error Handling — Complete
 - Testing — Upcoming
 - Documentation & Deployment — Upcoming
