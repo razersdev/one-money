@@ -91,6 +91,10 @@ def update_category(
         )
     )
 
+    if cursor.rowcount == 0:
+        connection.close()
+        return None
+
     connection.commit()
 
     connection.close()
@@ -118,6 +122,10 @@ def delete_category(user_id: int, category_id: int):
             user_id
         )
     )
+
+    if cursor.rowcount == 0:
+        connection.close()
+        return None
 
     connection.commit()
 

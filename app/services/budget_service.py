@@ -99,6 +99,10 @@ def update_budget(
         )
     )
 
+    if cursor.rowcount == 0:
+        connection.close()
+        return None
+
     connection.commit()
 
     connection.close()
@@ -127,6 +131,10 @@ def delete_budget(user_id: int, budget_id: int):
             user_id
         )
     )
+
+    if cursor.rowcount == 0:
+        connection.close()
+        return None
 
     connection.commit()
 

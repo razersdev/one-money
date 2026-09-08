@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class BudgetCreate(BaseModel):
     category_id: int
-    amount: float
+    amount: float = Field(gt=0)

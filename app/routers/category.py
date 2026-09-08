@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.models.category import CategoryCreate
@@ -42,9 +42,10 @@ def add_category(
     connection.close()
 
     if not user:
-        return {
-            "message": "User not found"
-        }
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
 
     user_id = user[0]
 
@@ -83,9 +84,10 @@ def read_categories(
     connection.close()
 
     if not user:
-        return {
-            "message": "User not found"
-        }
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
 
     user_id = user[0]
 
@@ -123,9 +125,10 @@ def edit_category(
     connection.close()
 
     if not user:
-        return {
-            "message": "User not found"
-        }
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
 
     user_id = user[0]
 
@@ -134,6 +137,12 @@ def edit_category(
         category_id,
         category
     )
+
+    if result is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Category not found"
+        )
 
     return {
         "message": "Category updated successfully",
@@ -166,9 +175,10 @@ def remove_category(
     connection.close()
 
     if not user:
-        return {
-            "message": "User not found"
-        }
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
 
     user_id = user[0]
 
@@ -176,6 +186,12 @@ def remove_category(
         user_id,
         category_id
     )
+
+    if result is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Category not found"
+        )
 
     return {
         "message": "Category deleted successfully",

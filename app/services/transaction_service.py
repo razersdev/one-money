@@ -116,6 +116,10 @@ def update_transaction(
         )
     )
 
+    if cursor.rowcount == 0:
+        connection.close()
+        return None
+
     connection.commit()
 
     connection.close()
@@ -146,6 +150,10 @@ def delete_transaction(user_id: int, transaction_id: int):
             user_id
         )
     )
+
+    if cursor.rowcount == 0:
+        connection.close()
+        return None
 
     connection.commit()
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.services.dashboard_service import get_dashboard
@@ -35,9 +35,10 @@ def read_dashboard(
     connection.close()
 
     if not user:
-        return {
-            "message": "User not found"
-        }
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
 
     user_id = user[0]
 

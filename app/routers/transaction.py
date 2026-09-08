@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.models.transaction import TransactionCreate
@@ -43,9 +43,10 @@ def add_transaction(
     connection.close()
 
     if not user:
-        return {
-            "message": "User not found"
-        }
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
 
     user_id = user[0]
 
@@ -86,9 +87,10 @@ def read_transactions(
     connection.close()
 
     if not user:
-        return {
-            "message": "User not found"
-        }
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
 
     user_id = user[0]
 
@@ -130,9 +132,10 @@ def edit_transaction(
     connection.close()
 
     if not user:
-        return {
-            "message": "User not found"
-        }
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
 
     user_id = user[0]
 
@@ -141,6 +144,12 @@ def edit_transaction(
         transaction_id,
         transaction
     )
+
+    if result is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Transaction not found"
+        )
 
     return {
         "message": "Transaction updated successfully",
@@ -173,9 +182,10 @@ def remove_transaction(
     connection.close()
 
     if not user:
-        return {
-            "message": "User not found"
-        }
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
 
     user_id = user[0]
 
@@ -183,6 +193,12 @@ def remove_transaction(
         user_id,
         transaction_id
     )
+
+    if result is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Transaction not found"
+        )
 
     return {
         "message": "Transaction deleted successfully",
