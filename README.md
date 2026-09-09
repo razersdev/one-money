@@ -68,9 +68,20 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 - User not found handling
 - HTTP 404 error responses
 
+### Testing
+
+- Pytest test suite
+- Test database isolation
+- Authentication tests
+- Transaction CRUD tests
+- Category CRUD tests
+- Budget CRUD tests
+- Dashboard tests
+- Financial report tests
+- Full test suite: 19/19 tests passed
+
 ## Upcoming Features
 
-- Testing
 - Documentation & deployment
 
 ## Tech Stack
@@ -81,6 +92,7 @@ One Money adalah aplikasi personal finance management untuk membantu pengguna me
 - Pydantic
 - bcrypt
 - JWT
+- Pytest
 
 ## API Endpoints
 
@@ -133,5 +145,5 @@ Currently under development.
 - Dashboard Logic — Complete
 - Financial Reports — Complete
 - Validation & Error Handling — Complete
-- Testing — Upcoming
+- Testing — Complete
 - Documentation & Deployment — Upcoming
