@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 .env
 one_money.db
+test_one_money.db
