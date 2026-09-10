@@ -36,3 +36,17 @@ def about():
     return {
         "message": "One Money is a personal finance management API"
     }
+
+@app.get("/health")
+def health_check():
+    return {
+        "status": "ok",
+        "service": "One Money API"
+    }
+
+@app.get("/version")
+def version():
+    return {
+        "name": "One Money API",
+        "version": "1.0.0"
+    }

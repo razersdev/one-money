@@ -1,0 +1,8 @@
+services:                               # tempat mendefinisikan service yang akan dijalankan
+  one-money:                            # nama service
+    build: .                            # docker compose akan mencari Dockerfile di direktori saat ini
+    container_name: one-money-container # Nama container tetap seperti yang kita gunakan sebelumnya.
+    ports:
+      - "8000:8000"
+    env_file:                           # file environment
+      - .env
