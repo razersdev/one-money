@@ -2,3 +2,5 @@ fastapi
 uvicorn
 email-validator
 bcrypt
+python-dotenv
+PyJWT

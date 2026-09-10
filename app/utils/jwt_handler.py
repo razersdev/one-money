@@ -1,10 +1,14 @@
+import os
 import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 
+from dotenv import load_dotenv
 from fastapi import HTTPException, status
 
 
-SECRET_KEY = "one_money_secret_key"
+load_dotenv()
+
+SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
@@ -13,7 +17,7 @@ def create_access_token(data: dict):
 
     to_encode = data.copy()
 
-    expire = datetime.utcnow() + timedelta(
+    expire = datetime.now(UTC) + timedelta(
         minutes=ACCESS_TOKEN_EXPIRE_MINUTES
     )
 
