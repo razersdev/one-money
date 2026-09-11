@@ -4,4 +4,5 @@ __pycache__/
 .env
 one_money.db
 test_one_money.db
-.env
+frontend/node_modules/
+frontend/dist/
