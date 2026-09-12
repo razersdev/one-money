@@ -6,6 +6,10 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from "recharts"
 
 const chartData = [
@@ -15,6 +19,46 @@ const chartData = [
   { month: "Apr", income: 6100000, expense: 2300000 },
   { month: "May", income: 5700000, expense: 1900000 },
   { month: "Jun", income: 7000000, expense: 1750000 },
+]
+
+const expenseCategoryData = [
+  { name: "Food", value: 35 },
+  { name: "Transport", value: 20 },
+  { name: "Bills", value: 18 },
+  { name: "Shopping", value: 15 },
+  { name: "Other", value: 12 },
+]
+
+const categoryColors = [
+  "#2563eb",
+  "#16a34a",
+  "#dc2626",
+  "#d97706",
+  "#64748b",
+]
+
+const recentTransactions = [
+  {
+    id: 1,
+    title: "Monthly Salary",
+    type: "Income",
+    date: "Jun 28, 2026",
+    amount: 7000000,
+  },
+  {
+    id: 2,
+    title: "Food & Drinks",
+    type: "Expense",
+    date: "Jun 27, 2026",
+    amount: 75000,
+  },
+  {
+    id: 3,
+    title: "Transportation",
+    type: "Expense",
+    date: "Jun 26, 2026",
+    amount: 50000,
+  },
 ]
 
 function Dashboard() {
@@ -39,23 +83,23 @@ function Dashboard() {
 
       {/* Summary Cards */}
       <div className="summary-grid">
-        <article className="summary-card">
+        <article className="summary-card summary-card-balance">
           <p className="summary-label">Total Balance</p>
           <h2>Rp 5.250.000</h2>
         </article>
 
-        <article className="summary-card">
+        <article className="summary-card summary-card-income">
           <p className="summary-label">Income</p>
           <h2>Rp 7.000.000</h2>
         </article>
 
-        <article className="summary-card">
+        <article className="summary-card summary-card-expense">
           <p className="summary-label">Expense</p>
           <h2>Rp 1.750.000</h2>
         </article>
       </div>
 
-      {/* Financial Chart */}
+      {/* Financial Overview */}
       <div className="chart-card">
         <div className="chart-header">
           <div>
@@ -69,31 +113,106 @@ function Dashboard() {
 
         <div className="chart-container">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
+            <AreaChart
+              data={chartData}
+              margin={{
+                top: 10,
+                right: 10,
+                left: 0,
+                bottom: 0,
+              }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+              />
 
-              <XAxis dataKey="month" />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                axisLine={false}
+              />
 
-              <YAxis />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) =>
+                  `${value / 1000000}M`
+                }
+              />
 
-              <Tooltip />
+              <Tooltip
+                formatter={(value) =>
+                  `Rp ${Number(value).toLocaleString("id-ID")}`
+                }
+              />
 
               <Area
                 type="monotone"
                 dataKey="income"
-                stroke="#334155"
-                fill="#334155"
+                name="Income"
+                stroke="#16a34a"
+                fill="#16a34a"
                 fillOpacity={0.08}
+                strokeWidth={2}
               />
 
               <Area
                 type="monotone"
                 dataKey="expense"
-                stroke="#94a3b8"
-                fill="#94a3b8"
-                fillOpacity={0.08}
+                name="Expense"
+                stroke="#dc2626"
+                fill="#dc2626"
+                fillOpacity={0.06}
+                strokeWidth={2}
               />
             </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Expense by Category */}
+      <div className="category-card">
+        <div className="category-header">
+          <div>
+            <h2>Expense by Category</h2>
+
+            <p>
+              Distribution of your expenses by category.
+            </p>
+          </div>
+        </div>
+
+        <div className="category-chart-container">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={expenseCategoryData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="45%"
+                innerRadius={75}
+                outerRadius={115}
+                paddingAngle={2}
+              >
+                {expenseCategoryData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${entry.name}`}
+                    fill={categoryColors[index]}
+                  />
+                ))}
+              </Pie>
+
+              <Tooltip
+                formatter={(value) => `${value}%`}
+              />
+
+              <Legend
+                verticalAlign="bottom"
+                height={36}
+              />
+            </PieChart>
           </ResponsiveContainer>
         </div>
       </div>
@@ -115,38 +234,31 @@ function Dashboard() {
         </div>
 
         <div className="transaction-list">
-          <div className="transaction-item">
-            <div>
-              <h3>Monthly Salary</h3>
-              <p>Income · Jun 28, 2026</p>
+          {recentTransactions.map((transaction) => (
+            <div
+              className="transaction-item"
+              key={transaction.id}
+            >
+              <div>
+                <h3>{transaction.title}</h3>
+
+                <p>
+                  {transaction.type} · {transaction.date}
+                </p>
+              </div>
+
+              <span
+                className={
+                  transaction.type === "Income"
+                    ? "transaction-income"
+                    : "transaction-expense"
+                }
+              >
+                {transaction.type === "Income" ? "+" : "-"} Rp{" "}
+                {transaction.amount.toLocaleString("id-ID")}
+              </span>
             </div>
-
-            <span className="transaction-income">
-              + Rp 7.000.000
-            </span>
-          </div>
-
-          <div className="transaction-item">
-            <div>
-              <h3>Food & Drinks</h3>
-              <p>Expense · Jun 27, 2026</p>
-            </div>
-
-            <span className="transaction-expense">
-              - Rp 75.000
-            </span>
-          </div>
-
-          <div className="transaction-item">
-            <div>
-              <h3>Transportation</h3>
-              <p>Expense · Jun 26, 2026</p>
-            </div>
-
-            <span className="transaction-expense">
-              - Rp 50.000
-            </span>
-          </div>
+          ))}
         </div>
       </div>
     </section>
