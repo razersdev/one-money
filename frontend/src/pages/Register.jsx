@@ -1,15 +1,22 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 
-function Login() {
+function Register() {
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
   function handleSubmit(event) {
     event.preventDefault()
     setError("")
+
+    if (!name.trim()) {
+      setError("Name is required.")
+      return
+    }
 
     if (!email.trim()) {
       setError("Email is required.")
@@ -31,6 +38,11 @@ function Login() {
       return
     }
 
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.")
+      return
+    }
+
     setLoading(true)
 
     setTimeout(() => {
@@ -44,10 +56,10 @@ function Login() {
         <div className="auth-header">
           <p className="auth-eyebrow">One Money</p>
 
-          <h1>Welcome back</h1>
+          <h1>Create your account</h1>
 
           <p>
-            Sign in to continue managing your finances.
+            Start managing your finances with One Money.
           </p>
         </div>
 
@@ -57,6 +69,19 @@ function Login() {
               {error}
             </div>
           )}
+
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="Your name"
+              disabled={loading}
+            />
+          </div>
 
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -79,7 +104,24 @@ function Login() {
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              placeholder="Enter your password"
+              placeholder="Create a password"
+              disabled={loading}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="confirm-password">
+              Confirm Password
+            </label>
+
+            <input
+              id="confirm-password"
+              type="password"
+              value={confirmPassword}
+              onChange={(event) =>
+                setConfirmPassword(event.target.value)
+              }
+              placeholder="Confirm your password"
               disabled={loading}
             />
           </div>
@@ -89,14 +131,14 @@ function Login() {
             className="auth-button"
             disabled={loading}
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "Creating account..." : "Create Account"}
           </button>
         </form>
 
         <div className="auth-footer">
           <p>
-            Don't have an account?{" "}
-            <Link to="/register">Create one</Link>
+            Already have an account?{" "}
+            <Link to="/login">Sign in</Link>
           </p>
         </div>
       </section>
@@ -104,4 +146,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Register
