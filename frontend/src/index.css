@@ -706,3 +706,360 @@ a {
   cursor: not-allowed;
   opacity: 0.65;
 }
+
+/* ========================================
+   TRANSACTIONS PAGE
+======================================== */
+
+.page {
+  width: 100%;
+}
+
+/* Page Header */
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.page-header p {
+  margin: 0;
+  color: #667085;
+  font-size: 15px;
+}
+
+/* Buttons */
+
+.primary-button {
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.primary-button:hover {
+  background: #1d4ed8;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* ========================================
+   TRANSACTION FORM
+======================================== */
+
+.transaction-form-card {
+  background: #ffffff;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.04);
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.form-header h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 650;
+  color: #172033;
+}
+
+.form-header p {
+  margin: 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+.form-header > button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #d0d5dd;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #475467;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.form-header > button:hover {
+  background: #f2f4f7;
+}
+
+.transaction-form-card form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group:first-child {
+  grid-column: span 2;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #344054;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #101828;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-actions {
+  grid-column: span 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.form-actions button {
+  min-height: 40px;
+  padding: 9px 16px;
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #344054;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.form-actions button:hover {
+  background: #f9fafb;
+}
+
+.form-actions .primary-button {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.form-actions .primary-button:hover {
+  background: #1d4ed8;
+}
+
+/* ========================================
+   TRANSACTION FILTERS
+======================================== */
+
+.transaction-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.transaction-filters input,
+.transaction-filters select {
+  height: 40px;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #344054;
+  font-size: 14px;
+  outline: none;
+}
+
+.transaction-filters input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.transaction-filters input:focus,
+.transaction-filters select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* ========================================
+   TRANSACTION TABLE
+======================================== */
+
+.transaction-card {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.04);
+}
+
+.transaction-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.transaction-row {
+  display: grid;
+  grid-template-columns:
+    120px
+    minmax(180px, 1.5fr)
+    minmax(120px, 1fr)
+    100px
+    140px
+    80px;
+  align-items: center;
+  min-width: 760px;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.transaction-row:last-child {
+  border-bottom: none;
+}
+
+.transaction-row > span {
+  padding: 15px 16px;
+  font-size: 14px;
+  color: #475467;
+}
+
+.transaction-header {
+  background: #f9fafb;
+}
+
+.transaction-header > span {
+  padding-top: 13px;
+  padding-bottom: 13px;
+  color: #667085;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.transaction-row:not(.transaction-header):hover {
+  background: #fcfcfd;
+}
+
+.transaction-row:not(.transaction-header) > span:nth-child(2) {
+  color: #101828;
+  font-weight: 550;
+}
+
+.transaction-row:not(.transaction-header) > span:nth-child(5) {
+  color: #101828;
+  font-weight: 600;
+}
+
+.transaction-row button {
+  border: 1px solid #d0d5dd;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #344054;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.transaction-row button:hover {
+  background: #f2f4f7;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 900px) {
+  .page-header {
+    flex-direction: column;
+  }
+
+  .transaction-form-card form {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group:first-child {
+    grid-column: span 1;
+  }
+
+  .form-actions {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-header h1 {
+    font-size: 28px;
+  }
+
+  .page-header .primary-button {
+    width: 100%;
+  }
+
+  .transaction-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .transaction-filters input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .transaction-filters select {
+    width: 100%;
+  }
+
+  .transaction-form-card {
+    padding: 18px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
