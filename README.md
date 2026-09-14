@@ -126,6 +126,14 @@ The current frontend foundation includes:
 - Authentication UI foundation
 - Login page
 - Register page
+- Transaction management interface
+- Transaction add form
+- Transaction edit form
+- Transaction type selection
+- Transaction category selection
+- Transaction date selection
+- Transaction search/filter foundation
+- Application routing for transaction management
 
 ### Frontend UI Direction
 
@@ -176,99 +184,111 @@ The final visual identity, logo, accent color, and dark mode will be developed i
 
 ## Project Structure
 
-    one-money/
+```text
+one-money/
 
-    │
-    ├── app/
-    │   ├── database/
-    │   │   ├── connection.py
-    │   │   └── init_db.py
-    │   │
-    │   ├── models/
-    │   │   ├── budget.py
-    │   │   ├── category.py
-    │   │   ├── transaction.py
-    │   │   └── user.py
-    │   │
-    │   ├── routers/
-    │   │   ├── auth.py
-    │   │   ├── budget.py
-    │   │   ├── category.py
-    │   │   ├── dashboard.py
-    │   │   ├── report.py
-    │   │   └── transaction.py
-    │   │
-    │   ├── services/
-    │   │   ├── auth_service.py
-    │   │   ├── budget_service.py
-    │   │   ├── category_service.py
-    │   │   ├── dashboard_service.py
-    │   │   ├── report_service.py
-    │   │   └── transaction_service.py
-    │   │
-    │   ├── utils/
-    │   │   └── jwt_handler.py
-    │   │
-    │   ├── __init__.py
-    │   └── main.py
-    │
-    ├── tests/
-    │   ├── test_auth.py
-    │   ├── test_budget.py
-    │   ├── test_category.py
-    │   ├── test_dashboard.py
-    │   ├── test_database.py
-    │   ├── test_main.py
-    │   ├── test_report.py
-    │   └── test_transaction.py
-    │
-    ├── frontend/
-    │   ├── src/
-    │   │   ├── assets/
-    │   │   ├── components/
-    │   │   │   └── Sidebar.jsx
-    │   │   ├── hooks/
-    │   │   ├── layouts/
-    │   │   │   └── MainLayout.jsx
-    │   │   ├── pages/
-    │   │   │   ├── Dashboard.jsx
-    │   │   │   ├── Login.jsx
-    │   │   │   └── Register.jsx
-    │   │   ├── services/
-    │   │   ├── utils/
-    │   │   ├── App.jsx
-    │   │   ├── index.css
-    │   │   └── main.jsx
-    │   │
-    │   ├── package.json
-    │   ├── package-lock.json
-    │   └── vite.config.js
-    │
-    ├── Dockerfile
-    ├── docker-compose.yml
-    ├── .dockerignore
-    ├── .gitignore
-    ├── conftest.py
-    ├── pytest.ini
-    └── README.md
+│
+├── app/
+│   ├── database/
+│   │   ├── connection.py
+│   │   └── init_db.py
+│   │
+│   ├── models/
+│   │   ├── budget.py
+│   │   ├── category.py
+│   │   ├── transaction.py
+│   │   └── user.py
+│   │
+│   ├── routers/
+│   │   ├── auth.py
+│   │   ├── budget.py
+│   │   ├── category.py
+│   │   ├── dashboard.py
+│   │   ├── report.py
+│   │   └── transaction.py
+│   │
+│   ├── services/
+│   │   ├── auth_service.py
+│   │   ├── budget_service.py
+│   │   ├── category_service.py
+│   │   ├── dashboard_service.py
+│   │   ├── report_service.py
+│   │   └── transaction_service.py
+│   │
+│   ├── utils/
+│   │   └── jwt_handler.py
+│   │
+│   ├── __init__.py
+│   └── main.py
+│
+├── tests/
+│   ├── test_auth.py
+│   ├── test_budget.py
+│   ├── test_category.py
+│   ├── test_dashboard.py
+│   ├── test_database.py
+│   ├── test_main.py
+│   ├── test_report.py
+│   └── test_transaction.py
+│
+├── frontend/
+│   ├── src/
+│   │   ├── assets/
+│   │   │
+│   │   ├── components/
+│   │   │   └── Sidebar.jsx
+│   │   │
+│   │   ├── hooks/
+│   │   │
+│   │   ├── layouts/
+│   │   │   └── MainLayout.jsx
+│   │   │
+│   │   ├── pages/
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   └── Transactions.jsx
+│   │   │
+│   │   ├── services/
+│   │   │
+│   │   ├── utils/
+│   │   │
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   └── main.jsx
+│   │
+│   ├── package.json
+│   ├── package-lock.json
+│   └── vite.config.js
+│
+├── Dockerfile
+├── docker-compose.yml
+├── .dockerignore
+├── .gitignore
+├── conftest.py
+├── pytest.ini
+└── README.md
+```
 
 ---
 
 ## Architecture
 
-    ONE MONEY
-        │
-        ├──────────────────────────────┐
-        │                              │
-        ▼                              ▼
-    React Frontend               FastAPI Backend
-        (Vite)                     (REST API)
-        │                              │
-        │          HTTP / JSON         │
-        └──────────────┬───────────────┘
-                       │
-                       ▼
-                  SQLite Database
+```text
+                    ONE MONEY
+                        │
+          ┌─────────────┴─────────────┐
+          │                           │
+          ▼                           ▼
+   React Frontend              FastAPI Backend
+       (Vite)                     (REST API)
+          │                           │
+          │        HTTP / JSON        │
+          └─────────────┬─────────────┘
+                        │
+                        ▼
+                   SQLite Database
+```
 
 The backend is responsible for:
 
@@ -294,19 +314,23 @@ The frontend is responsible for:
 
 The backend provides REST API endpoints for:
 
-    /auth
-    /transactions
-    /categories
-    /budgets
-    /dashboard
-    /reports
+```text
+/auth
+/transactions
+/categories
+/budgets
+/dashboard
+/reports
+```
 
 Basic HTTP method mapping:
 
-    GET     → Read data
-    POST    → Create data
-    PUT     → Update data
-    DELETE  → Delete data
+```text
+GET     → Read data
+POST    → Create data
+PUT     → Update data
+DELETE  → Delete data
+```
 
 Protected resources require authentication using JWT.
 
@@ -318,27 +342,39 @@ Protected resources require authentication using JWT.
 
 Create and activate the Python virtual environment:
 
-    python -m venv venv
+```bash
+python -m venv venv
+```
 
 Activate on Windows:
 
-    .\venv\Scripts\Activate.ps1
+```powershell
+.\venv\Scripts\Activate.ps1
+```
 
 Install dependencies:
 
-    pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
+```
 
 Run the FastAPI development server:
 
-    uvicorn app.main:app --reload
+```bash
+uvicorn app.main:app --reload
+```
 
 The API will be available at:
 
-    http://127.0.0.1:8000
+```text
+http://127.0.0.1:8000
+```
 
 FastAPI documentation:
 
-    http://127.0.0.1:8000/docs
+```text
+http://127.0.0.1:8000/docs
+```
 
 ---
 
@@ -346,30 +382,42 @@ FastAPI documentation:
 
 Move into the frontend directory:
 
-    cd frontend
+```bash
+cd frontend
+```
 
 Install dependencies:
 
-    npm install
+```bash
+npm install
+```
 
 Run the development server:
 
-    npm run dev
+```bash
+npm run dev
+```
 
 The frontend will be available at:
 
-    http://localhost:5173
+```text
+http://localhost:5173
+```
 
 ---
 
 ### Frontend Production Build
 
-    cd frontend
-    npm run build
+```bash
+cd frontend
+npm run build
+```
 
 The production build will be generated inside:
 
-    frontend/dist/
+```text
+frontend/dist/
+```
 
 ---
 
@@ -379,15 +427,21 @@ One Money is prepared to run using Docker.
 
 Build and start the application:
 
-    docker compose up --build
+```bash
+docker compose up --build
+```
 
 Run in detached mode:
 
-    docker compose up -d --build
+```bash
+docker compose up -d --build
+```
 
 Stop the containers:
 
-    docker compose down
+```bash
+docker compose down
+```
 
 Docker is used to provide a consistent application environment and simplify deployment.
 
@@ -399,7 +453,9 @@ Sensitive configuration should be stored in a `.env` file.
 
 Example:
 
-    SECRET_KEY=your-secret-key
+```env
+SECRET_KEY=your-secret-key
+```
 
 The `.env` file is excluded from Git using `.gitignore`.
 
@@ -411,11 +467,15 @@ The `.env` file is excluded from Git using `.gitignore`.
 
 Run the complete test suite:
 
-    pytest
+```bash
+pytest
+```
 
 Current test status:
 
-    19/19 tests passed
+```text
+19/19 tests passed
+```
 
 Testing currently covers:
 
@@ -436,7 +496,9 @@ The project uses Git for version control and GitHub as the remote repository.
 
 Current backend release:
 
-    v1.0.0
+```text
+v1.0.0
+```
 
 Frontend development is currently continuing on the main branch.
 
@@ -444,39 +506,43 @@ Frontend development is currently continuing on the main branch.
 
 ## Current Development Status
 
-    Backend
+```text
+Backend
 
-    ├── FastAPI                    ✅
-    ├── Authentication             ✅
-    ├── JWT                        ✅
-    ├── Transaction CRUD           ✅
-    ├── Category CRUD              ✅
-    ├── Budget CRUD                ✅
-    ├── Dashboard                  ✅
-    ├── Financial Reports          ✅
-    ├── Validation                 ✅
-    ├── Automated Testing          ✅
-    ├── Docker                     ✅
-    └── v1.0.0                     ✅
+├── FastAPI                    ✅
+├── Authentication             ✅
+├── JWT                        ✅
+├── Transaction CRUD           ✅
+├── Category CRUD              ✅
+├── Budget CRUD                ✅
+├── Dashboard                  ✅
+├── Financial Reports          ✅
+├── Validation                 ✅
+├── Automated Testing          ✅
+├── Docker                     ✅
+└── v1.0.0                     ✅
 
 
-    Frontend
+Frontend
 
-    ├── React + Vite               ✅
-    ├── React Router               ✅
-    ├── Axios                      ✅
-    ├── Recharts                   ✅
-    ├── Lucide React               ✅
-    ├── Application Layout         ✅
-    ├── Sidebar                    ✅
-    ├── Dashboard                  ✅
-    ├── Financial Cards            ✅
-    ├── Financial Chart            ✅
-    ├── Recent Transactions        ✅
-    ├── Responsive Foundation      ✅
-    ├── Login UI                   ✅
-    ├── Register UI                ✅
-    └── API Integration            ⏳
+├── React + Vite               ✅
+├── React Router               ✅
+├── Axios                      ✅
+├── Recharts                   ✅
+├── Lucide React               ✅
+├── Application Layout         ✅
+├── Sidebar                    ✅
+├── Dashboard                  ✅
+├── Financial Cards            ✅
+├── Financial Chart            ✅
+├── Recent Transactions        ✅
+├── Responsive Foundation      ✅
+├── Login UI                   ✅
+├── Register UI                ✅
+├── Transaction Management     ✅
+├── Transaction CRUD UI        ✅
+└── API Integration            ⏳
+```
 
 ---
 
@@ -495,12 +561,15 @@ Frontend development is currently continuing on the main branch.
 - [x] Authentication UI
 - [x] Login page
 - [x] Register page
+- [x] Transaction management interface
+- [x] Transaction add form
+- [x] Transaction edit form
+- [x] Transaction routing
 - [ ] Authentication API integration
 - [ ] Final visual identity
 - [ ] Logo
 - [ ] API integration
 - [ ] Real transaction data
-- [ ] Transaction management interface
 - [ ] Category interface
 - [ ] Budget interface
 - [ ] Financial reports interface
@@ -537,7 +606,9 @@ Frontend development is currently continuing on the main branch.
 
 The backend foundation has been completed, including authentication, authorization, transaction management, category management, budget management, dashboard logic, financial reports, validation, automated testing, and Docker preparation.
 
-The frontend is currently in the authentication and application integration stage. The dashboard and authentication UI foundation have been completed, while API integration and real backend-connected user flows are the next major development phase.
+The frontend foundation has also progressed through the dashboard, authentication UI, and transaction management interface. The current transaction management interface includes transaction listing, adding transactions, editing transactions, filtering foundation, and application routing.
+
+The next major development phase is connecting the frontend with the existing backend API so that authentication and transaction data can operate using real backend resources instead of frontend temporary data.
 
 The long-term goal is to build a complete, reliable, and professional personal finance management application.
 
