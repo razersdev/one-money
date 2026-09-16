@@ -62,6 +62,7 @@ Project ini dibangun dengan fokus pada backend application menggunakan **FastAPI
 - Update budget
 - Delete budget
 - Budgets automatically linked to authenticated user
+- Budget progress/status visualization
 
 ### Dashboard
 
@@ -130,8 +131,10 @@ The current frontend foundation includes:
 ### Transaction Management Interface
 
 - Transaction management interface
+- Transaction list
 - Transaction add form
 - Transaction edit form
+- Transaction delete action
 - Transaction type selection
 - Transaction category selection
 - Transaction date selection
@@ -148,6 +151,18 @@ The current frontend foundation includes:
 - Category type selection
 - Category search/filter foundation
 - Application routing for category management
+
+### Budget Management Interface
+
+- Budget management interface
+- Budget list
+- Add budget
+- Edit budget
+- Delete budget
+- Budget amount configuration
+- Budget period selection
+- Budget progress/status visualization
+- Application routing for budget management
 
 ### Frontend UI Direction
 
@@ -262,7 +277,8 @@ one-money/
 │   │   │   ├── Login.jsx
 │   │   │   ├── Register.jsx
 │   │   │   ├── Transactions.jsx
-│   │   │   └── Categories.jsx
+│   │   │   ├── Categories.jsx
+│   │   │   └── Budgets.jsx
 │   │
 │   │   ├── services/
 │   │
@@ -559,6 +575,9 @@ Frontend
 ├── Category Management        ✅
 ├── Category CRUD UI           ✅
 ├── Category Search/Filter     ✅
+├── Budget Management          ✅
+├── Budget CRUD UI             ✅
+├── Budget Progress/Status     ✅
 └── API Integration            ⏳
 ```
 
@@ -606,12 +625,12 @@ Frontend
 
 ### CP26 — Budget Management
 
-- [ ] Budget page
-- [ ] Budget list
-- [ ] Add budget
-- [ ] Edit budget
-- [ ] Delete budget
-- [ ] Budget progress/status
+- [x] Budget page
+- [x] Budget list
+- [x] Add budget
+- [x] Edit budget
+- [x] Delete budget
+- [x] Budget progress/status
 
 ### CP27 — Financial Reports
 
@@ -711,7 +730,7 @@ Frontend
 
 The backend foundation has been completed, including authentication, authorization, transaction management, category management, budget management, dashboard logic, financial reports, validation, automated testing, and Docker preparation.
 
-The frontend foundation has also progressed through the dashboard, authentication UI, transaction management, and category management interface. The current transaction and category management interfaces use temporary local data for frontend development.
+The frontend foundation has also progressed through the dashboard, authentication UI, transaction management, category management, and budget management interfaces. The current transaction, category, and budget management interfaces use temporary local data for frontend development.
 
 The next major development phase is connecting the frontend with the existing backend API so that authentication and application data can operate using real backend resources instead of frontend temporary data.
 
