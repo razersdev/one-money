@@ -5,12 +5,14 @@ import Register from "./pages/Register"
 import Dashboard from "./pages/Dashboard"
 import Transactions from "./pages/Transactions"
 import Categories from "./pages/Categories"
+import Budgets from "./pages/Budgets"
 import MainLayout from "./layouts/MainLayout"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+
         {/* Default */}
         <Route
           path="/"
@@ -48,9 +50,10 @@ function App() {
 
           <Route
             path="/budgets"
-            element={<div>Budgets</div>}
+            element={<Budgets />}
           />
 
+          {/* Temporary Pages */}
           <Route
             path="/reports"
             element={<div>Reports</div>}
@@ -62,6 +65,7 @@ function App() {
           />
 
         </Route>
+
       </Routes>
     </BrowserRouter>
   )
