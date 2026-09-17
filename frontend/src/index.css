@@ -1290,3 +1290,837 @@ button {
     gap: 4px;
   }
 }
+
+/* =========================
+   Financial Reports
+========================= */
+
+.report-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.report-filters .form-group {
+  margin-bottom: 0;
+}
+
+.report-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.report-card {
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.report-card span {
+  display: block;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.report-card strong {
+  display: block;
+  margin-top: 10px;
+  font-size: 24px;
+  color: #0f172a;
+}
+
+.report-section {
+  margin-top: 24px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.report-section h2 {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.report-category {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.report-category:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.report-category:first-of-type {
+  padding-top: 0;
+}
+
+.report-category span {
+  font-size: 14px;
+  color: #475569;
+}
+
+.report-category strong {
+  font-size: 15px;
+  color: #0f172a;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .report-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .report-filters .primary-button {
+    width: 100%;
+  }
+
+  .report-summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .report-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .report-filters .primary-button {
+    width: 100%;
+  }
+
+  .report-card,
+  .report-section {
+    padding: 20px;
+  }
+
+  .report-card strong {
+    font-size: 21px;
+  }
+
+  .report-category {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+/* =========================
+   Report Visualization
+========================= */
+
+.report-chart {
+  width: 100%;
+  min-height: 320px;
+  margin-top: 8px;
+}
+
+.report-chart .recharts-wrapper {
+  margin: 0 auto;
+}
+
+.report-chart .recharts-text {
+  font-size: 13px;
+  fill: #475569;
+}
+
+.report-chart .recharts-legend-item-text {
+  color: #475569 !important;
+  font-size: 13px;
+}
+
+.report-chart .recharts-tooltip-wrapper {
+  outline: none;
+}
+
+/* Report Layout */
+
+.report-section + .report-section {
+  margin-top: 24px;
+}
+
+/* Responsive Chart */
+
+@media (max-width: 600px) {
+  .report-chart {
+    min-height: 280px;
+  }
+}
+
+/* =========================
+   Report Status
+========================= */
+
+.report-status {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #16a34a;
+}
+
+/* =========================
+   Report Meta
+========================= */
+
+.report-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.report-meta strong {
+  color: #0f172a;
+  font-size: 16px;
+}
+
+/* =========================
+   Report Layout
+========================= */
+
+.report-period {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.report-period span {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.report-period strong {
+  font-size: 14px;
+  color: #0f172a;
+}
+
+/* =========================
+   Report Content Grid
+========================= */
+
+.report-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.report-content-grid .report-section {
+  margin-top: 0;
+}
+
+/* =========================
+   Category Summary
+========================= */
+
+.category-summary-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-summary-list .report-category {
+  min-height: 58px;
+  box-sizing: border-box;
+}
+
+.report-category > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.report-category small {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* =========================
+   Report Chart
+========================= */
+
+.report-chart {
+  width: 100%;
+  height: 300px;
+  margin-top: 8px;
+}
+
+.report-chart .recharts-wrapper {
+  margin: 0 auto;
+}
+
+.report-chart .recharts-text {
+  font-size: 12px;
+  fill: #475569;
+}
+
+.report-chart .recharts-legend-item-text {
+  color: #475569 !important;
+  font-size: 13px;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 900px) {
+  .report-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .report-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .report-period {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 500px) {
+  .report-content-grid {
+    gap: 16px;
+  }
+
+  .report-section {
+    padding: 20px;
+  }
+
+  .report-chart {
+    height: 280px;
+  }
+}
+
+/* =========================
+   One Money Date Picker
+========================= */
+
+.date-picker-group {
+  position: relative;
+  min-width: 0;
+}
+
+.date-picker-button {
+  width: 100%;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 13px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #0f172a;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  text-align: left;
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.date-picker-button:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.date-picker-button:focus {
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(
+      37,
+      99,
+      235,
+      0.1
+    );
+}
+
+.date-placeholder {
+  color: #94a3b8;
+}
+
+.date-value {
+  color: #0f172a;
+}
+
+.calendar-icon {
+  flex-shrink: 0;
+  color: #64748b;
+}
+
+/* =========================
+   Calendar
+========================= */
+
+.custom-calendar {
+  position: absolute;
+
+  top: calc(100% + 8px);
+  left: 0;
+
+  width: 292px;
+
+  padding: 16px;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  box-shadow:
+    0 12px 30px rgba(
+      15,
+      23,
+      42,
+      0.10
+    ),
+    0 4px 10px rgba(
+      15,
+      23,
+      42,
+      0.04
+    );
+
+  z-index: 9999;
+
+  box-sizing: border-box;
+
+  animation:
+    calendarAppear
+    0.15s
+    ease-out;
+}
+
+@keyframes calendarAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   Calendar Header
+========================= */
+
+.calendar-header {
+  display: grid;
+
+  grid-template-columns:
+    32px
+    1fr
+    32px;
+
+  align-items: center;
+
+  margin-bottom: 14px;
+}
+
+.calendar-title {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 3px;
+}
+
+.calendar-month-button,
+.calendar-year-button {
+  padding: 5px 7px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: transparent;
+  color: #0f172a;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.calendar-month-button:hover,
+.calendar-year-button:hover {
+  background: #f1f5f9;
+  color: #2563eb;
+}
+
+.calendar-month-button::after,
+.calendar-year-button::after {
+  content: "⌄";
+
+  margin-left: 4px;
+
+  color: #94a3b8;
+
+  font-size: 10px;
+}
+
+.calendar-nav-button {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 7px;
+
+  background: transparent;
+  color: #475569;
+
+  font-family: inherit;
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.calendar-nav-button:hover {
+  background: #f1f5f9;
+  color: #2563eb;
+}
+
+/* =========================
+   Weekdays
+========================= */
+
+.calendar-weekdays {
+  display: grid;
+
+  grid-template-columns:
+    repeat(7, 1fr);
+
+  margin-bottom: 6px;
+}
+
+.calendar-weekdays span {
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* =========================
+   Days
+========================= */
+
+.calendar-days {
+  display: grid;
+
+  grid-template-columns:
+    repeat(7, 1fr);
+
+  gap: 4px;
+}
+
+.calendar-days span {
+  width: 32px;
+  height: 32px;
+}
+
+.calendar-days button {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 7px;
+
+  background: transparent;
+  color: #334155;
+
+  font-family: inherit;
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.calendar-days button:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.calendar-days button:active {
+  transform: scale(0.94);
+}
+
+.calendar-days button.selected {
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.calendar-days button.selected:hover {
+  background: #1d4ed8;
+  color: #ffffff;
+}
+
+.calendar-days button.today:not(.selected) {
+  box-shadow:
+    inset 0 0 0 1px #2563eb;
+
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.calendar-days button.disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.calendar-days button.disabled:hover {
+  background: transparent;
+  color: #cbd5e1;
+}
+
+/* =========================
+   Month / Year Selection
+========================= */
+
+.calendar-selection {
+  width: 100%;
+}
+
+.calendar-selection-header {
+  margin-bottom: 14px;
+
+  color: #64748b;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.calendar-month-grid,
+.calendar-year-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 6px;
+}
+
+.calendar-month-grid button,
+.calendar-year-grid button {
+  height: 38px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: transparent;
+  color: #334155;
+
+  font-family: inherit;
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.calendar-month-grid button:hover,
+.calendar-year-grid button:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.calendar-month-grid button.active,
+.calendar-year-grid button.active {
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* =========================
+   Calendar Footer
+========================= */
+
+.calendar-footer {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 12px;
+  padding-top: 12px;
+
+  border-top: 1px solid #f1f5f9;
+}
+
+.calendar-footer button {
+  padding: 6px 12px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: transparent;
+  color: #2563eb;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease;
+}
+
+.calendar-footer button:hover {
+  background: #eff6ff;
+}
+
+/* =========================
+   Back Button
+========================= */
+
+.calendar-back-button {
+  width: 100%;
+
+  margin-top: 12px;
+  padding: 8px;
+
+  border: none;
+  border-top: 1px solid #f1f5f9;
+
+  background: transparent;
+  color: #2563eb;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+
+  cursor: pointer;
+}
+
+.calendar-back-button:hover {
+  background: #f8fafc;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 700px) {
+  .custom-calendar {
+    width: 292px;
+    max-width: calc(100vw - 32px);
+  }
+}
+
+/* =========================
+   End Date Calendar Position
+========================= */
+
+.end-date-picker .custom-calendar {
+  left: auto;
+  right: 0;
+}
+/* =========================
+   Fixed Sidebar Layout
+========================= */
+
+.app-layout {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

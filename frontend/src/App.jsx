@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard"
 import Transactions from "./pages/Transactions"
 import Categories from "./pages/Categories"
 import Budgets from "./pages/Budgets"
+import Reports from "./pages/Reports"
 import MainLayout from "./layouts/MainLayout"
 
 function App() {
@@ -53,12 +54,12 @@ function App() {
             element={<Budgets />}
           />
 
-          {/* Temporary Pages */}
           <Route
             path="/reports"
-            element={<div>Reports</div>}
+            element={<Reports />}
           />
 
+          {/* Temporary Pages */}
           <Route
             path="/settings"
             element={<div>Settings</div>}
