@@ -119,6 +119,8 @@ The current frontend foundation includes:
 - Lucide React
 - Main application layout
 - Sidebar navigation
+- Fixed sidebar navigation
+- Independent main content scrolling
 - Dashboard page
 - Financial summary cards
 - Financial overview chart
@@ -163,6 +165,24 @@ The current frontend foundation includes:
 - Budget period selection
 - Budget progress/status visualization
 - Application routing for budget management
+
+### Financial Reports Interface
+
+- Financial reports interface
+- Start date selection
+- End date selection
+- Custom date picker
+- Month selection
+- Year selection
+- Previous/next month navigation
+- Today shortcut
+- Start/end date validation
+- Financial summary cards
+- Report period display
+- Expense by category visualization
+- Category summary
+- Expense percentage calculation
+- Responsive report layout
 
 ### Frontend UI Direction
 
@@ -213,7 +233,6 @@ The final visual identity, logo, accent color, and dark mode will be developed i
 
 ## Project Structure
 
-```text
 one-money/
 
 │
@@ -278,7 +297,8 @@ one-money/
 │   │   │   ├── Register.jsx
 │   │   │   ├── Transactions.jsx
 │   │   │   ├── Categories.jsx
-│   │   │   └── Budgets.jsx
+│   │   │   ├── Budgets.jsx
+│   │   │   └── Reports.jsx
 │   │
 │   │   ├── services/
 │   │
@@ -299,14 +319,13 @@ one-money/
 ├── conftest.py
 ├── pytest.ini
 └── README.md
-```
 
 ---
 
 ## Architecture
 
-```text
                     ONE MONEY
+
                         │
           ┌─────────────┴─────────────┐
           │                           │
@@ -319,7 +338,6 @@ one-money/
                         │
                         ▼
                    SQLite Database
-```
 
 The backend is responsible for:
 
@@ -345,23 +363,27 @@ The frontend is responsible for:
 
 The backend provides REST API endpoints for:
 
-```text
 /auth
+
 /transactions
+
 /categories
+
 /budgets
+
 /dashboard
+
 /reports
-```
 
 Basic HTTP method mapping:
 
-```text
 GET     → Read data
+
 POST    → Create data
+
 PUT     → Update data
+
 DELETE  → Delete data
-```
 
 Protected resources require authentication using JWT.
 
@@ -373,39 +395,27 @@ Protected resources require authentication using JWT.
 
 Create and activate the Python virtual environment:
 
-```bash
 python -m venv venv
-```
 
 Activate on Windows:
 
-```powershell
 .\venv\Scripts\Activate.ps1
-```
 
 Install dependencies:
 
-```bash
 pip install -r requirements.txt
-```
 
 Run the FastAPI development server:
 
-```bash
 uvicorn app.main:app --reload
-```
 
 The API will be available at:
 
-```text
 http://127.0.0.1:8000
-```
 
 FastAPI documentation:
 
-```text
 http://127.0.0.1:8000/docs
-```
 
 ---
 
@@ -413,42 +423,31 @@ http://127.0.0.1:8000/docs
 
 Move into the frontend directory:
 
-```bash
 cd frontend
-```
 
 Install dependencies:
 
-```bash
 npm install
-```
 
 Run the development server:
 
-```bash
 npm run dev
-```
 
 The frontend will be available at:
 
-```text
 http://localhost:5173
-```
 
 ---
 
 ### Frontend Production Build
 
-```bash
 cd frontend
+
 npm run build
-```
 
 The production build will be generated inside:
 
-```text
 frontend/dist/
-```
 
 ---
 
@@ -458,21 +457,15 @@ One Money is prepared to run using Docker.
 
 Build and start the application:
 
-```bash
 docker compose up --build
-```
 
 Run in detached mode:
 
-```bash
 docker compose up -d --build
-```
 
 Stop the containers:
 
-```bash
 docker compose down
-```
 
 Docker is used to provide a consistent application environment and simplify deployment.
 
@@ -484,9 +477,7 @@ Sensitive configuration should be stored in a `.env` file.
 
 Example:
 
-```env
-SECRET_KEY=your-secret-key
-```
+JWT_SECRET_KEY=your-secret-key
 
 The `.env` file is excluded from Git using `.gitignore`.
 
@@ -498,15 +489,11 @@ The `.env` file is excluded from Git using `.gitignore`.
 
 Run the complete test suite:
 
-```bash
 pytest
-```
 
 Current test status:
 
-```text
 19/19 tests passed
-```
 
 Testing currently covers:
 
@@ -527,9 +514,7 @@ The project uses Git for version control and GitHub as the remote repository.
 
 Current backend release:
 
-```text
 v1.0.0
-```
 
 Frontend development is currently continuing on the main branch.
 
@@ -537,49 +522,53 @@ Frontend development is currently continuing on the main branch.
 
 ## Current Development Status
 
-```text
 Backend
 
-├── FastAPI                    ✅
-├── Authentication             ✅
-├── JWT                        ✅
-├── Transaction CRUD           ✅
-├── Category CRUD              ✅
-├── Budget CRUD                ✅
-├── Dashboard                  ✅
-├── Financial Reports          ✅
-├── Validation                 ✅
-├── Automated Testing          ✅
-├── Docker                     ✅
-└── v1.0.0                     ✅
+├── FastAPI                     ✅
+├── Authentication              ✅
+├── JWT                         ✅
+├── Transaction CRUD             ✅
+├── Category CRUD                ✅
+├── Budget CRUD                  ✅
+├── Dashboard                    ✅
+├── Financial Reports            ✅
+├── Validation                   ✅
+├── Automated Testing            ✅
+├── Docker                       ✅
+└── v1.0.0                       ✅
 
 
 Frontend
 
-├── React + Vite               ✅
-├── React Router               ✅
-├── Axios                      ✅
-├── Recharts                   ✅
-├── Lucide React               ✅
-├── Application Layout         ✅
-├── Sidebar                    ✅
-├── Dashboard                  ✅
-├── Financial Cards            ✅
-├── Financial Chart            ✅
-├── Recent Transactions        ✅
-├── Responsive Foundation      ✅
-├── Login UI                   ✅
-├── Register UI                ✅
-├── Transaction Management     ✅
-├── Transaction CRUD UI        ✅
-├── Category Management        ✅
-├── Category CRUD UI           ✅
-├── Category Search/Filter     ✅
-├── Budget Management          ✅
-├── Budget CRUD UI             ✅
-├── Budget Progress/Status     ✅
-└── API Integration            ⏳
-```
+├── React + Vite                 ✅
+├── React Router                 ✅
+├── Axios                        ✅
+├── Recharts                     ✅
+├── Lucide React                 ✅
+├── Application Layout           ✅
+├── Sidebar                      ✅
+├── Fixed Sidebar                ✅
+├── Dashboard                    ✅
+├── Financial Cards              ✅
+├── Financial Chart              ✅
+├── Recent Transactions          ✅
+├── Responsive Foundation        ✅
+├── Login UI                     ✅
+├── Register UI                  ✅
+├── Transaction Management       ✅
+├── Transaction CRUD UI          ✅
+├── Category Management          ✅
+├── Category CRUD UI             ✅
+├── Category Search/Filter       ✅
+├── Budget Management            ✅
+├── Budget CRUD UI               ✅
+├── Budget Progress/Status       ✅
+├── Financial Reports UI         ✅
+├── Date Range Selection         ✅
+├── Report Summary               ✅
+├── Category Summary             ✅
+├── Report Visualization         ✅
+└── API Integration              ⏳
 
 ---
 
@@ -634,11 +623,18 @@ Frontend
 
 ### CP27 — Financial Reports
 
-- [ ] Report page
-- [ ] Date range
-- [ ] Income/expense summary
-- [ ] Category summary
-- [ ] Report visualization
+- [x] Report page
+- [x] Date range
+- [x] Income/expense summary
+- [x] Category summary
+- [x] Report visualization
+- [x] Custom date picker
+- [x] Month selection
+- [x] Year selection
+- [x] Previous/next month navigation
+- [x] Today shortcut
+- [x] Date validation
+- [x] Responsive report layout
 
 ### CP28 — Frontend API Integration
 
@@ -730,7 +726,9 @@ Frontend
 
 The backend foundation has been completed, including authentication, authorization, transaction management, category management, budget management, dashboard logic, financial reports, validation, automated testing, and Docker preparation.
 
-The frontend foundation has also progressed through the dashboard, authentication UI, transaction management, category management, and budget management interfaces. The current transaction, category, and budget management interfaces use temporary local data for frontend development.
+The frontend foundation has also progressed through the dashboard, authentication UI, transaction management, category management, budget management, and financial reports interfaces. The current transaction, category, budget, and financial reports interfaces use temporary local data for frontend development.
+
+The Financial Reports interface currently includes date range selection, custom date picker interaction, income and expense summaries, balance calculation, category summaries, and expense visualization.
 
 The next major development phase is connecting the frontend with the existing backend API so that authentication and application data can operate using real backend resources instead of frontend temporary data.
 
