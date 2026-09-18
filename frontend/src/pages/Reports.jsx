@@ -8,6 +8,9 @@ import {
   ResponsiveContainer,
 } from "recharts"
 
+import api from "../services/api"
+
+
 function DatePicker({
   value,
   onChange,
@@ -63,9 +66,9 @@ function DatePicker({
     "Dec",
   ]
 
-  /* =========================
-     Helpers
-  ========================= */
+  // =========================
+  // HELPERS
+  // =========================
 
   const toDateString = (date) => {
     const year = date.getFullYear()
@@ -98,9 +101,9 @@ function DatePicker({
     })
   }
 
-  /* =========================
-     Open Picker
-  ========================= */
+  // =========================
+  // OPEN PICKER
+  // =========================
 
   const openPicker = () => {
     setIsOpen(true)
@@ -128,9 +131,9 @@ function DatePicker({
     }
   }
 
-  /* =========================
-     Close Outside
-  ========================= */
+  // =========================
+  // CLOSE OUTSIDE
+  // =========================
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -158,9 +161,9 @@ function DatePicker({
     }
   }, [])
 
-  /* =========================
-     Calendar Days
-  ========================= */
+  // =========================
+  // CALENDAR DAYS
+  // =========================
 
   const getCalendarDays = () => {
     const year =
@@ -208,9 +211,9 @@ function DatePicker({
     return days
   }
 
-  /* =========================
-     Select Date
-  ========================= */
+  // =========================
+  // SELECT DATE
+  // =========================
 
   const handleSelectDate = (date) => {
     if (!date) return
@@ -231,9 +234,9 @@ function DatePicker({
     setCalendarView("days")
   }
 
-  /* =========================
-     Month Navigation
-  ========================= */
+  // =========================
+  // MONTH NAVIGATION
+  // =========================
 
   const previousMonth = () => {
     setCalendarMonth(
@@ -255,9 +258,9 @@ function DatePicker({
     )
   }
 
-  /* =========================
-     Month Selection
-  ========================= */
+  // =========================
+  // MONTH SELECTION
+  // =========================
 
   const handleMonthSelect = (
     monthIndex
@@ -273,9 +276,9 @@ function DatePicker({
     setCalendarView("days")
   }
 
-  /* =========================
-     Year Selection
-  ========================= */
+  // =========================
+  // YEAR SELECTION
+  // =========================
 
   const currentYear =
     today.getFullYear()
@@ -302,9 +305,9 @@ function DatePicker({
     setCalendarView("days")
   }
 
-  /* =========================
-     Today
-  ========================= */
+  // =========================
+  // TODAY
+  // =========================
 
   const handleToday = () => {
     const todayValue =
@@ -378,7 +381,6 @@ function DatePicker({
             width="18"
             height="18"
             rx="2"
-            ry="2"
           />
 
           <line
@@ -407,9 +409,7 @@ function DatePicker({
       {isOpen && (
         <div className="custom-calendar">
 
-          {/* =========================
-              Days View
-          ========================= */}
+          {/* DAYS VIEW */}
 
           {calendarView === "days" && (
             <>
@@ -568,9 +568,7 @@ function DatePicker({
             </>
           )}
 
-          {/* =========================
-              Month View
-          ========================= */}
+          {/* MONTH VIEW */}
 
           {calendarView === "months" && (
             <div className="calendar-selection">
@@ -631,9 +629,7 @@ function DatePicker({
             </div>
           )}
 
-          {/* =========================
-              Year View
-          ========================= */}
+          {/* YEAR VIEW */}
 
           {calendarView === "years" && (
             <div className="calendar-selection">
@@ -697,6 +693,7 @@ function DatePicker({
   )
 }
 
+
 function Reports() {
   const [startDate, setStartDate] =
     useState("")
@@ -704,40 +701,19 @@ function Reports() {
   const [endDate, setEndDate] =
     useState("")
 
-  const [
-    reportGenerated,
-    setReportGenerated,
-  ] = useState(false)
+  const [report, setReport] =
+    useState(null)
 
-  /* =========================
-     Dummy Data
-  ========================= */
+  const [loading, setLoading] =
+    useState(false)
 
-  const categoryData = [
-    {
-      name: "Food",
-      value: 1000000,
-    },
-    {
-      name: "Transport",
-      value: 500000,
-    },
-    {
-      name: "Shopping",
-      value: 750000,
-    },
-  ]
+  const [error, setError] =
+    useState("")
 
-  const totalIncome = 5000000
 
-  const totalExpense = 2750000
-
-  const balance =
-    totalIncome - totalExpense
-
-  /* =========================
-     Format Currency
-  ========================= */
+  // =========================
+  // FORMAT CURRENCY
+  // =========================
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat(
@@ -747,12 +723,13 @@ function Reports() {
         currency: "IDR",
         maximumFractionDigits: 0,
       }
-    ).format(value)
+    ).format(value || 0)
   }
 
-  /* =========================
-     Format Date
-  ========================= */
+
+  // =========================
+  // FORMAT DATE
+  // =========================
 
   const formatDate = (date) => {
     if (!date) return ""
@@ -771,35 +748,107 @@ function Reports() {
     })
   }
 
-  /* =========================
-     Generate Report
-  ========================= */
 
-  const handleGenerateReport = () => {
-    if (!startDate || !endDate) {
-      alert(
-        "Please select start date and end date."
-      )
+  // =========================
+  // GENERATE REPORT
+  // =========================
 
-      return
+  const handleGenerateReport =
+    async () => {
+
+      if (!startDate || !endDate) {
+        setError(
+          "Please select start date and end date."
+        )
+
+        return
+      }
+
+      if (startDate > endDate) {
+        setError(
+          "Start date cannot be later than end date."
+        )
+
+        return
+      }
+
+      try {
+        setLoading(true)
+        setError("")
+
+        const response =
+          await api.get(
+            "/reports",
+            {
+              params: {
+                start_date:
+                  startDate,
+                end_date:
+                  endDate,
+              },
+            }
+          )
+
+        setReport(
+          response.data.data
+        )
+      } catch (error) {
+        console.error(error)
+
+        setReport(null)
+
+        setError(
+          error.response?.data?.detail ||
+            "Gagal mengambil financial report."
+        )
+      } finally {
+        setLoading(false)
+      }
     }
 
-    if (startDate > endDate) {
-      alert(
-        "Start date cannot be later than end date."
-      )
 
-      return
-    }
+  // =========================
+  // EXPENSE CATEGORY DATA
+  // =========================
 
-    setReportGenerated(true)
-  }
+  const categoryData =
+    report
+      ? Object.entries(
+          report.expense_by_category || {}
+        ).map(
+          ([name, value]) => ({
+            name,
+            value: Number(value),
+          })
+        )
+      : []
+
+
+  // =========================
+  // SUMMARY VALUES
+  // =========================
+
+  const totalIncome =
+    Number(
+      report?.total_income || 0
+    )
+
+  const totalExpense =
+    Number(
+      report?.total_expense || 0
+    )
+
+  const balance =
+    Number(
+      report?.balance || 0
+    )
+
 
   return (
     <div className="page">
 
       {/* =========================
-          Header
+          HEADER
       ========================= */}
 
       <div className="page-header">
@@ -818,8 +867,9 @@ function Reports() {
 
       </div>
 
+
       {/* =========================
-          Date Filters
+          DATE FILTERS
       ========================= */}
 
       <div className="report-filters">
@@ -844,17 +894,41 @@ function Reports() {
           onClick={
             handleGenerateReport
           }
+          disabled={loading}
         >
-          Generate Report
+          {loading
+            ? "Generating..."
+            : "Generate Report"}
         </button>
 
       </div>
 
+
       {/* =========================
-          Report Period
+          ERROR
       ========================= */}
 
-      {reportGenerated && (
+      {error && (
+        <div
+          style={{
+            marginBottom: "16px",
+            padding: "12px 16px",
+            borderRadius: "8px",
+            background: "#fef2f2",
+            color: "#b91c1c",
+            border: "1px solid #fecaca",
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+
+      {/* =========================
+          REPORT PERIOD
+      ========================= */}
+
+      {report && (
         <div className="report-period">
 
           <span>
@@ -862,207 +936,292 @@ function Reports() {
           </span>
 
           <strong>
-            {formatDate(startDate)}
+            {formatDate(
+              report.start_date
+            )}
+
             {" — "}
-            {formatDate(endDate)}
+
+            {formatDate(
+              report.end_date
+            )}
           </strong>
 
         </div>
       )}
 
-      {/* =========================
-          Summary
-      ========================= */}
-
-      <div className="report-summary">
-
-        <div className="report-card">
-
-          <span>
-            Total Income
-          </span>
-
-          <strong>
-            {formatCurrency(
-              totalIncome
-            )}
-          </strong>
-
-        </div>
-
-        <div className="report-card">
-
-          <span>
-            Total Expense
-          </span>
-
-          <strong>
-            {formatCurrency(
-              totalExpense
-            )}
-          </strong>
-
-        </div>
-
-        <div className="report-card">
-
-          <span>
-            Balance
-          </span>
-
-          <strong>
-            {formatCurrency(
-              balance
-            )}
-          </strong>
-
-          <small className="report-status">
-            {balance >= 0
-              ? "Positive Balance"
-              : "Negative Balance"}
-          </small>
-
-        </div>
-
-      </div>
 
       {/* =========================
-          Report Content
+          SUMMARY
       ========================= */}
 
-      <div className="report-content-grid">
+      {report && (
+        <div className="report-summary">
 
-        {/* Chart */}
+          <div className="report-card">
 
-        <div className="report-section">
+            <span>
+              Total Income
+            </span>
 
-          <h2>
-            Expense by Category
-          </h2>
+            <strong>
+              {formatCurrency(
+                totalIncome
+              )}
+            </strong>
 
-          <div className="report-chart">
+          </div>
 
-            <ResponsiveContainer
-              width="100%"
-              height={300}
-            >
-              <PieChart>
 
-                <Pie
-                  data={categoryData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="45%"
-                  outerRadius={95}
-                  label={({
-                    percent,
-                  }) =>
-                    `${Math.round(
-                      percent * 100
-                    )}%`
-                  }
+          <div className="report-card">
+
+            <span>
+              Total Expense
+            </span>
+
+            <strong>
+              {formatCurrency(
+                totalExpense
+              )}
+            </strong>
+
+          </div>
+
+
+          <div className="report-card">
+
+            <span>
+              Balance
+            </span>
+
+            <strong>
+              {formatCurrency(
+                balance
+              )}
+            </strong>
+
+            <small className="report-status">
+              {balance >= 0
+                ? "Positive Balance"
+                : "Negative Balance"}
+            </small>
+
+          </div>
+
+        </div>
+      )}
+
+
+      {/* =========================
+          REPORT CONTENT
+      ========================= */}
+
+      {report && (
+        <div className="report-content-grid">
+
+          {/* =========================
+              EXPENSE CHART
+          ========================= */}
+
+          <div className="report-section">
+
+            <h2>
+              Expense by Category
+            </h2>
+
+            {categoryData.length === 0 ? (
+
+              <div className="report-chart">
+
+                <p>
+                  No expense data for
+                  this period.
+                </p>
+
+              </div>
+
+            ) : (
+
+              <div className="report-chart">
+
+                <ResponsiveContainer
+                  width="100%"
+                  height={300}
                 >
 
-                  {categoryData.map(
-                    (
-                      category,
-                      index
-                    ) => (
-                      <Cell
+                  <PieChart>
+
+                    <Pie
+                      data={categoryData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="45%"
+                      outerRadius={95}
+                      label={({
+                        percent,
+                      }) =>
+                        `${Math.round(
+                          percent * 100
+                        )}%`
+                      }
+                    >
+
+                      {categoryData.map(
+                        (
+                          category,
+                          index
+                        ) => (
+                          <Cell
+                            key={
+                              category.name
+                            }
+                            fill={
+                              [
+                                "#2563eb",
+                                "#16a34a",
+                                "#f59e0b",
+                                "#dc2626",
+                                "#7c3aed",
+                                "#0891b2",
+                              ][
+                                index %
+                                  6
+                              ]
+                            }
+                          />
+                        )
+                      )}
+
+                    </Pie>
+
+
+                    <Tooltip
+                      formatter={(
+                        value
+                      ) =>
+                        formatCurrency(
+                          value
+                        )
+                      }
+                    />
+
+
+                    <Legend />
+
+                  </PieChart>
+
+                </ResponsiveContainer>
+
+              </div>
+
+            )}
+
+          </div>
+
+
+          {/* =========================
+              CATEGORY SUMMARY
+          ========================= */}
+
+          <div className="report-section">
+
+            <h2>
+              Category Summary
+            </h2>
+
+            {categoryData.length === 0 ? (
+
+              <div className="category-summary-list">
+
+                <p>
+                  No category expense
+                  data for this period.
+                </p>
+
+              </div>
+
+            ) : (
+
+              <div className="category-summary-list">
+
+                {categoryData.map(
+                  (category) => {
+
+                    const percentage =
+                      totalExpense > 0
+                        ? Math.round(
+                            (category.value /
+                              totalExpense) *
+                              100
+                          )
+                        : 0
+
+                    return (
+                      <div
+                        className="report-category"
                         key={
                           category.name
                         }
-                        fill={
-                          [
-                            "#2563eb",
-                            "#16a34a",
-                            "#f59e0b",
-                          ][index]
-                        }
-                      />
-                    )
-                  )}
+                      >
 
-                </Pie>
+                        <div>
 
-                <Tooltip
-                  formatter={(value) =>
-                    formatCurrency(
-                      value
+                          <span>
+                            {category.name}
+                          </span>
+
+                          <small>
+                            {percentage}%
+                            {" "}
+                            of expenses
+                          </small>
+
+                        </div>
+
+                        <strong>
+                          {formatCurrency(
+                            category.value
+                          )}
+                        </strong>
+
+                      </div>
                     )
                   }
-                />
+                )}
 
-                <Legend />
+              </div>
 
-              </PieChart>
-            </ResponsiveContainer>
-
-          </div>
-
-        </div>
-
-        {/* Category Summary */}
-
-        <div className="report-section">
-
-          <h2>
-            Category Summary
-          </h2>
-
-          <div className="category-summary-list">
-
-            {categoryData.map(
-              (category) => {
-
-                const percentage =
-                  totalExpense > 0
-                    ? Math.round(
-                        (category.value /
-                          totalExpense) *
-                          100
-                      )
-                    : 0
-
-                return (
-                  <div
-                    className="report-category"
-                    key={
-                      category.name
-                    }
-                  >
-
-                    <div>
-
-                      <span>
-                        {category.name}
-                      </span>
-
-                      <small>
-                        {percentage}%
-                        {" "}
-                        of expenses
-                      </small>
-
-                    </div>
-
-                    <strong>
-                      {formatCurrency(
-                        category.value
-                      )}
-                    </strong>
-
-                  </div>
-                )
-              }
             )}
 
           </div>
 
         </div>
+      )}
 
-      </div>
+
+      {/* =========================
+          EMPTY STATE
+      ========================= */}
+
+      {!report && !loading && !error && (
+        <div
+          className="report-section"
+          style={{
+            marginTop: "24px",
+          }}
+        >
+          <h2>
+            Generate a Report
+          </h2>
+
+          <p>
+            Select a start date and end
+            date to analyze your financial
+            activity.
+          </p>
+        </div>
+      )}
 
     </div>
   )
