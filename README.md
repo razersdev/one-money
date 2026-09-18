@@ -34,6 +34,7 @@ Project ini dibangun dengan fokus pada backend application menggunakan **FastAPI
 - JWT authentication
 - Protected endpoints
 - Authentication-based resource ownership
+- Frontend JWT/token storage
 
 ### Transaction Management
 
@@ -46,6 +47,12 @@ Project ini dibangun dengan fokus pada backend application menggunakan **FastAPI
 - Filter transactions by category
 - Combined filtering by type and category
 - Case-insensitive filtering
+- Frontend transaction CRUD integration with backend API
+- Frontend search/filter foundation
+- Loading state
+- Error state
+- Success state
+- Empty state
 
 ### Category Management
 
@@ -54,6 +61,12 @@ Project ini dibangun dengan fokus pada backend application menggunakan **FastAPI
 - Update category
 - Delete category
 - Categories automatically linked to authenticated user
+- Frontend category CRUD integration with backend API
+- Category search/filter foundation
+- Loading state
+- Error state
+- Success state
+- Empty state
 
 ### Budget Management
 
@@ -63,6 +76,12 @@ Project ini dibangun dengan fokus pada backend application menggunakan **FastAPI
 - Delete budget
 - Budgets automatically linked to authenticated user
 - Budget progress/status visualization
+- Frontend budget CRUD integration with backend API
+- Category selection from backend data
+- Loading state
+- Error state
+- Success state
+- Empty state
 
 ### Dashboard
 
@@ -70,6 +89,9 @@ Project ini dibangun dengan fokus pada backend application menggunakan **FastAPI
 - Total expense
 - Balance calculation
 - Expense summary by category
+- Frontend dashboard integration with backend API
+- Real financial summary data
+- Recent transactions from backend data
 
 ### Financial Reports
 
@@ -79,6 +101,19 @@ Project ini dibangun dengan fokus pada backend application menggunakan **FastAPI
 - Balance by period
 - Income summary by category
 - Expense summary by category
+- Frontend financial report integration with backend API
+- Real report data
+- Report period display
+- Expense by category visualization
+- Category summary
+- Expense percentage calculation
+- Custom date picker
+- Month selection
+- Year selection
+- Previous/next month navigation
+- Today shortcut
+- Start/end date validation
+- Responsive report layout
 
 ### Validation & Error Handling
 
@@ -91,6 +126,10 @@ Project ini dibangun dengan fokus pada backend application menggunakan **FastAPI
 - Resource not found handling
 - User not found handling
 - HTTP 404 error responses
+- Frontend API error handling
+- Frontend loading states
+- Frontend success states
+- Frontend empty states
 
 ### Testing
 
@@ -110,7 +149,7 @@ Project ini dibangun dengan fokus pada backend application menggunakan **FastAPI
 
 The One Money frontend is built using **React + Vite**.
 
-The current frontend foundation includes:
+The frontend currently includes:
 
 - React + Vite setup
 - React Router
@@ -142,6 +181,12 @@ The current frontend foundation includes:
 - Transaction date selection
 - Transaction search/filter foundation
 - Application routing for transaction management
+- Real backend API integration
+- JWT authentication through Axios
+- Loading state
+- Error state
+- Success state
+- Empty state
 
 ### Category Management Interface
 
@@ -153,6 +198,12 @@ The current frontend foundation includes:
 - Category type selection
 - Category search/filter foundation
 - Application routing for category management
+- Real backend API integration
+- JWT authentication through Axios
+- Loading state
+- Error state
+- Success state
+- Empty state
 
 ### Budget Management Interface
 
@@ -162,9 +213,15 @@ The current frontend foundation includes:
 - Edit budget
 - Delete budget
 - Budget amount configuration
-- Budget period selection
+- Category selection from backend data
 - Budget progress/status visualization
 - Application routing for budget management
+- Real backend API integration
+- JWT authentication through Axios
+- Loading state
+- Error state
+- Success state
+- Empty state
 
 ### Financial Reports Interface
 
@@ -183,8 +240,31 @@ The current frontend foundation includes:
 - Category summary
 - Expense percentage calculation
 - Responsive report layout
+- Real backend API integration
+- Real financial report data
+- Loading state
+- Error state
+- Empty state
 
-### Frontend UI Direction
+### Frontend API Integration
+
+The frontend communicates with the FastAPI backend using Axios.
+
+Current API-integrated features include:
+
+- Authentication
+- JWT token handling
+- Dashboard
+- Transactions
+- Categories
+- Budgets
+- Financial Reports
+
+The Axios service automatically attaches the stored JWT access token to protected API requests.
+
+---
+
+## Frontend UI Direction
 
 The visual direction of One Money focuses on:
 
@@ -301,6 +381,7 @@ one-money/
 │   │   │   └── Reports.jsx
 │   │
 │   │   ├── services/
+│   │   │   └── api.js
 │   │
 │   │   ├── utils/
 │   │
@@ -355,7 +436,9 @@ The frontend is responsible for:
 - Dashboard visualization
 - User interaction
 - API communication
+- JWT/token handling
 - Responsive presentation
+- Loading and error states
 
 ---
 
@@ -516,7 +599,7 @@ Current backend release:
 
 v1.0.0
 
-Frontend development is currently continuing on the main branch.
+Frontend development is continuing on the main branch.
 
 ---
 
@@ -524,57 +607,61 @@ Frontend development is currently continuing on the main branch.
 
 Backend
 
-├── FastAPI                     ✅
-├── Authentication              ✅
-├── JWT                         ✅
-├── Transaction CRUD             ✅
-├── Category CRUD                ✅
-├── Budget CRUD                  ✅
-├── Dashboard                    ✅
-├── Financial Reports            ✅
-├── Validation                   ✅
-├── Automated Testing            ✅
-├── Docker                       ✅
-└── v1.0.0                       ✅
+├── FastAPI                    ✅
+├── Authentication             ✅
+├── JWT                        ✅
+├── Transaction CRUD           ✅
+├── Category CRUD              ✅
+├── Budget CRUD                ✅
+├── Dashboard                  ✅
+├── Financial Reports          ✅
+├── Validation                 ✅
+├── Automated Testing          ✅
+├── Docker                     ✅
+└── v1.0.0                     ✅
 
 
 Frontend
 
-├── React + Vite                 ✅
-├── React Router                 ✅
-├── Axios                        ✅
-├── Recharts                     ✅
-├── Lucide React                 ✅
-├── Application Layout           ✅
-├── Sidebar                      ✅
-├── Fixed Sidebar                ✅
-├── Dashboard                    ✅
-├── Financial Cards              ✅
-├── Financial Chart              ✅
-├── Recent Transactions          ✅
-├── Responsive Foundation        ✅
-├── Login UI                     ✅
-├── Register UI                  ✅
-├── Transaction Management       ✅
-├── Transaction CRUD UI          ✅
-├── Category Management          ✅
-├── Category CRUD UI             ✅
-├── Category Search/Filter       ✅
-├── Budget Management            ✅
-├── Budget CRUD UI               ✅
-├── Budget Progress/Status       ✅
-├── Financial Reports UI         ✅
-├── Date Range Selection         ✅
-├── Report Summary               ✅
-├── Category Summary             ✅
-├── Report Visualization         ✅
-└── API Integration              ⏳
+├── React + Vite               ✅
+├── React Router               ✅
+├── Axios                      ✅
+├── Recharts                   ✅
+├── Lucide React               ✅
+├── Application Layout         ✅
+├── Sidebar                    ✅
+├── Fixed Sidebar              ✅
+├── Dashboard                  ✅
+├── Financial Cards            ✅
+├── Financial Chart            ✅
+├── Recent Transactions        ✅
+├── Responsive Foundation      ✅
+├── Login UI                   ✅
+├── Register UI                ✅
+├── Transaction Management     ✅
+├── Transaction CRUD UI        ✅
+├── Transaction API            ✅
+├── Category Management        ✅
+├── Category CRUD UI           ✅
+├── Category Search/Filter     ✅
+├── Category API               ✅
+├── Budget Management          ✅
+├── Budget CRUD UI             ✅
+├── Budget Progress/Status     ✅
+├── Budget API                 ✅
+├── Financial Reports UI       ✅
+├── Date Range Selection       ✅
+├── Report Summary             ✅
+├── Category Summary           ✅
+├── Report Visualization       ✅
+├── Reports API                ✅
+└── Frontend API Integration   ✅
 
 ---
 
 ## Roadmap
 
-### Frontend
+### Frontend Foundation
 
 - [x] React + Vite foundation
 - [x] Application layout
@@ -634,29 +721,33 @@ Frontend
 - [x] Previous/next month navigation
 - [x] Today shortcut
 - [x] Date validation
+- [x] Real financial report data
+- [x] Expense by category visualization
 - [x] Responsive report layout
 
 ### CP28 — Frontend API Integration
 
-- [ ] Axios service
-- [ ] Login/register → backend
-- [ ] JWT/token handling
-- [ ] Transactions → real API
-- [ ] Categories → real API
-- [ ] Budgets → real API
-- [ ] Dashboard → real API
-- [ ] Reports → real API
+- [x] Axios service
+- [x] Login/register → backend
+- [x] JWT/token handling
+- [x] Transactions → real API
+- [x] Categories → real API
+- [x] Budgets → real API
+- [x] Dashboard → real API
+- [x] Reports → real API
 
 ### CP29 — Real Data & Application Flow
 
-- [ ] Remove all dummy data
-- [ ] Loading state
-- [ ] Error state
-- [ ] Empty state
+- [ ] Remove remaining temporary frontend data
+- [ ] Unified loading state
+- [ ] Unified error state
+- [ ] Unified empty state
 - [ ] Protected routes
 - [ ] Logout
 - [ ] User session flow
 - [ ] Frontend ↔ backend synchronization
+- [ ] Authentication state management
+- [ ] API error handling refinement
 
 ### CP30 — UI Polish & Visual Identity
 
@@ -726,11 +817,15 @@ Frontend
 
 The backend foundation has been completed, including authentication, authorization, transaction management, category management, budget management, dashboard logic, financial reports, validation, automated testing, and Docker preparation.
 
-The frontend foundation has also progressed through the dashboard, authentication UI, transaction management, category management, budget management, and financial reports interfaces. The current transaction, category, budget, and financial reports interfaces use temporary local data for frontend development.
+The frontend foundation has progressed through the dashboard, authentication UI, transaction management, category management, budget management, and financial reports interfaces.
 
-The Financial Reports interface currently includes date range selection, custom date picker interaction, income and expense summaries, balance calculation, category summaries, and expense visualization.
+Frontend API integration has also been completed for authentication, dashboard data, transactions, categories, budgets, and financial reports using Axios and JWT-based authentication.
 
-The next major development phase is connecting the frontend with the existing backend API so that authentication and application data can operate using real backend resources instead of frontend temporary data.
+The current application can communicate with the backend and operate using real authenticated backend resources for the implemented API-integrated features.
+
+The next major development phase is **CP29 — Real Data & Application Flow**, which focuses on completing the application-wide session flow, protected routes, logout functionality, remaining temporary frontend data removal, unified state handling, and stronger frontend ↔ backend synchronization.
+
+After CP29, development will continue toward UI polish, frontend testing, integration quality assurance, production deployment, and the final One Money release.
 
 The long-term goal is to build a complete, reliable, and professional personal finance management application.
 
@@ -738,4 +833,4 @@ The long-term goal is to build a complete, reliable, and professional personal f
 
 ## License
 
-This project is currently developed as a personal learning and portfolio project.`
+This project is currently developed as a personal learning and portfolio project.
