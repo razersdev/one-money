@@ -1,5 +1,7 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+
+import api from "../services/api"
 
 function Register() {
   const [name, setName] = useState("")
@@ -7,11 +9,16 @@ function Register() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
   const [loading, setLoading] = useState(false)
 
-  function handleSubmit(event) {
+  const navigate = useNavigate()
+
+  async function handleSubmit(event) {
     event.preventDefault()
+
     setError("")
+    setSuccess("")
 
     if (!name.trim()) {
       setError("Name is required.")
@@ -33,8 +40,8 @@ function Register() {
       return
     }
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.")
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.")
       return
     }
 
@@ -45,9 +52,43 @@ function Register() {
 
     setLoading(true)
 
-    setTimeout(() => {
+    try {
+      const response = await api.post("/auth/register", {
+        name: name.trim(),
+        email: email.trim(),
+        password: password,
+      })
+
+      console.log("Register response:", response.data)
+
+      setSuccess("Account created successfully.")
+
+      setTimeout(() => {
+        navigate("/login")
+      }, 1000)
+    } catch (error) {
+      console.error("Register failed:", error)
+
+      if (error.response) {
+        const detail = error.response.data?.detail
+
+        if (Array.isArray(detail)) {
+          setError(
+            detail
+              .map((item) => item.msg)
+              .join(", ")
+          )
+        } else if (typeof detail === "string") {
+          setError(detail)
+        } else {
+          setError("Registration failed.")
+        }
+      } else {
+        setError("Unable to connect to the server.")
+      }
+    } finally {
       setLoading(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -67,6 +108,12 @@ function Register() {
           {error && (
             <div className="auth-error" role="alert">
               {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="auth-success" role="status">
+              {success}
             </div>
           )}
 
@@ -131,7 +178,9 @@ function Register() {
             className="auth-button"
             disabled={loading}
           >
-            {loading ? "Creating account..." : "Create Account"}
+            {loading
+              ? "Creating account..."
+              : "Create Account"}
           </button>
         </form>
 

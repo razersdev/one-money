@@ -1,5 +1,7 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+
+import api from "../services/api"
 
 function Login() {
   const [email, setEmail] = useState("")
@@ -7,8 +9,11 @@ function Login() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
-  function handleSubmit(event) {
+  const navigate = useNavigate()
+
+  async function handleSubmit(event) {
     event.preventDefault()
+
     setError("")
 
     if (!email.trim()) {
@@ -26,16 +31,49 @@ function Login() {
       return
     }
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.")
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.")
       return
     }
 
     setLoading(true)
 
-    setTimeout(() => {
+    try {
+      const response = await api.post("/auth/login", {
+        email: email.trim(),
+        password: password,
+      })
+
+      console.log("Login response:", response.data)
+
+      const token = response.data.access_token
+
+      localStorage.setItem("access_token", token)
+
+      navigate("/dashboard")
+    } catch (error) {
+      console.error("Login failed:", error)
+
+      if (error.response) {
+        const detail = error.response.data?.detail
+
+        if (Array.isArray(detail)) {
+          setError(
+            detail
+              .map((item) => item.msg)
+              .join(", ")
+          )
+        } else if (typeof detail === "string") {
+          setError(detail)
+        } else {
+          setError("Login failed.")
+        }
+      } else {
+        setError("Unable to connect to the server.")
+      }
+    } finally {
       setLoading(false)
-    }, 1000)
+    }
   }
 
   return (

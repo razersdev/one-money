@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import api from "../services/api"
 
 function Transactions() {
   const [showForm, setShowForm] = useState(false)
@@ -8,32 +9,13 @@ function Transactions() {
   const [typeFilter, setTypeFilter] = useState("all")
   const [categoryFilter, setCategoryFilter] = useState("all")
 
-  const [transactions, setTransactions] = useState([
-    {
-      id: 1,
-      date: "2026-09-14",
-      description: "Grocery Shopping",
-      category: "Food",
-      type: "Expense",
-      amount: 150000,
-    },
-    {
-      id: 2,
-      date: "2026-09-13",
-      description: "Freelance Payment",
-      category: "Income",
-      type: "Income",
-      amount: 2500000,
-    },
-    {
-      id: 3,
-      date: "2026-09-12",
-      description: "Internet Bill",
-      category: "Bills",
-      type: "Expense",
-      amount: 350000,
-    },
-  ])
+  const [transactions, setTransactions] = useState([])
+
+  const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
+
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
 
   const [formData, setFormData] = useState({
     description: "",
@@ -42,6 +24,45 @@ function Transactions() {
     category: "Food",
     date: "",
   })
+
+  const fetchTransactions = async () => {
+    try {
+      setLoading(true)
+      setError("")
+
+      const response = await api.get("/transactions")
+
+      console.log(
+        "Transactions response:",
+        response.data
+      )
+
+      setTransactions(response.data.data || [])
+    } catch (error) {
+      console.error(
+        "Transactions request failed:",
+        error
+      )
+
+      if (error.response) {
+        const detail = error.response.data?.detail
+
+        if (typeof detail === "string") {
+          setError(detail)
+        } else {
+          setError("Failed to load transactions.")
+        }
+      } else {
+        setError("Unable to connect to the server.")
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchTransactions()
+  }, [])
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -65,41 +86,89 @@ function Transactions() {
     setShowForm(false)
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
-    if (editingId !== null) {
-      setTransactions((previous) =>
-        previous.map((transaction) =>
-          transaction.id === editingId
-            ? {
-                ...transaction,
-                description: formData.description,
-                amount: Number(formData.amount),
-                type: formData.type,
-                category: formData.category,
-                date: formData.date,
-              }
-            : transaction
+    try {
+      setSubmitting(true)
+      setError("")
+      setSuccess("")
+
+      if (editingId !== null) {
+        const response = await api.put(
+          `/transactions/${editingId}`,
+          {
+            type: formData.type.toLowerCase(),
+            amount: Number(formData.amount),
+            description: formData.description.trim(),
+            category: formData.category,
+          }
         )
-      )
-    } else {
-      const newTransaction = {
-        id: Date.now(),
-        date: formData.date,
-        description: formData.description,
-        category: formData.category,
-        type: formData.type,
-        amount: Number(formData.amount),
+
+        console.log(
+          "Update transaction response:",
+          response.data
+        )
+
+        setSuccess(
+          "Transaction updated successfully."
+        )
+
+        resetForm()
+
+        await fetchTransactions()
+
+        return
       }
 
-      setTransactions((previous) => [
-        newTransaction,
-        ...previous,
-      ])
-    }
+      const response = await api.post(
+        "/transactions",
+        {
+          type: formData.type.toLowerCase(),
+          amount: Number(formData.amount),
+          description: formData.description.trim(),
+          category: formData.category,
+        }
+      )
 
-    resetForm()
+      console.log(
+        "Create transaction response:",
+        response.data
+      )
+
+      setSuccess(
+        "Transaction added successfully."
+      )
+
+      resetForm()
+
+      await fetchTransactions()
+    } catch (error) {
+      console.error(
+        "Transaction request failed:",
+        error
+      )
+
+      if (error.response) {
+        const detail = error.response.data?.detail
+
+        if (typeof detail === "string") {
+          setError(detail)
+        } else if (Array.isArray(detail)) {
+          setError(
+            detail
+              .map((item) => item.msg)
+              .join(", ")
+          )
+        } else {
+          setError("Failed to save transaction.")
+        }
+      } else {
+        setError("Unable to connect to the server.")
+      }
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const handleAddTransaction = () => {
@@ -113,6 +182,8 @@ function Transactions() {
       date: "",
     })
 
+    setError("")
+    setSuccess("")
     setShowForm(true)
   }
 
@@ -122,41 +193,106 @@ function Transactions() {
     setFormData({
       description: transaction.description,
       amount: transaction.amount,
-      type: transaction.type,
+      type:
+        transaction.type === "income"
+          ? "Income"
+          : "Expense",
       category: transaction.category,
-      date: transaction.date,
+      date: transaction.created_at
+        ? transaction.created_at.slice(0, 10)
+        : "",
     })
 
+    setError("")
+    setSuccess("")
     setShowForm(true)
   }
 
-  const filteredTransactions = transactions.filter((transaction) => {
-    const matchesSearch =
-      transaction.description
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
-
-    const matchesType =
-      typeFilter === "all" ||
-      transaction.type.toLowerCase() === typeFilter
-
-    const matchesCategory =
-      categoryFilter === "all" ||
-      transaction.category.toLowerCase() === categoryFilter
-
-    return (
-      matchesSearch &&
-      matchesType &&
-      matchesCategory
+  const handleDelete = async (transactionId) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this transaction?"
     )
-  })
+
+    if (!confirmed) {
+      return
+    }
+
+    try {
+      setError("")
+      setSuccess("")
+
+      const response = await api.delete(
+        `/transactions/${transactionId}`
+      )
+
+      console.log(
+        "Delete transaction response:",
+        response.data
+      )
+
+      setSuccess(
+        "Transaction deleted successfully."
+      )
+
+      await fetchTransactions()
+    } catch (error) {
+      console.error(
+        "Delete transaction failed:",
+        error
+      )
+
+      if (error.response) {
+        const detail = error.response.data?.detail
+
+        if (typeof detail === "string") {
+          setError(detail)
+        } else {
+          setError(
+            "Failed to delete transaction."
+          )
+        }
+      } else {
+        setError(
+          "Unable to connect to the server."
+        )
+      }
+    }
+  }
+
+  const filteredTransactions =
+    transactions.filter((transaction) => {
+      const matchesSearch =
+        transaction.description
+          .toLowerCase()
+          .includes(
+            searchQuery.toLowerCase()
+          )
+
+      const matchesType =
+        typeFilter === "all" ||
+        transaction.type.toLowerCase() ===
+          typeFilter
+
+      const matchesCategory =
+        categoryFilter === "all" ||
+        transaction.category.toLowerCase() ===
+          categoryFilter
+
+      return (
+        matchesSearch &&
+        matchesType &&
+        matchesCategory
+      )
+    })
 
   return (
     <div className="page">
       <div className="page-header">
         <div>
           <h1>Transactions</h1>
-          <p>Manage your income and expenses.</p>
+          <p>
+            Manage your income and expenses.
+          </p>
         </div>
 
         <button
@@ -166,6 +302,24 @@ function Transactions() {
           + Add Transaction
         </button>
       </div>
+
+      {error && (
+        <div
+          className="auth-error"
+          role="alert"
+        >
+          {error}
+        </div>
+      )}
+
+      {success && (
+        <div
+          className="auth-success"
+          role="status"
+        >
+          {success}
+        </div>
+      )}
 
       {showForm && (
         <div className="transaction-form-card">
@@ -187,6 +341,7 @@ function Transactions() {
             <button
               type="button"
               onClick={resetForm}
+              disabled={submitting}
             >
               ×
             </button>
@@ -237,8 +392,13 @@ function Transactions() {
                 value={formData.type}
                 onChange={handleChange}
               >
-                <option value="Expense">Expense</option>
-                <option value="Income">Income</option>
+                <option value="Expense">
+                  Expense
+                </option>
+
+                <option value="Income">
+                  Income
+                </option>
               </select>
             </div>
 
@@ -253,14 +413,29 @@ function Transactions() {
                 value={formData.category}
                 onChange={handleChange}
               >
-                <option value="Food">Food</option>
-                <option value="Bills">Bills</option>
-                <option value="Transport">Transport</option>
-                <option value="Shopping">Shopping</option>
+                <option value="Food">
+                  Food
+                </option>
+
+                <option value="Bills">
+                  Bills
+                </option>
+
+                <option value="Transport">
+                  Transport
+                </option>
+
+                <option value="Shopping">
+                  Shopping
+                </option>
+
                 <option value="Entertainment">
                   Entertainment
                 </option>
-                <option value="Income">Income</option>
+
+                <option value="Income">
+                  Income
+                </option>
               </select>
             </div>
 
@@ -283,6 +458,7 @@ function Transactions() {
               <button
                 type="button"
                 onClick={resetForm}
+                disabled={submitting}
               >
                 Cancel
               </button>
@@ -290,10 +466,13 @@ function Transactions() {
               <button
                 type="submit"
                 className="primary-button"
+                disabled={submitting}
               >
-                {editingId !== null
-                  ? "Save Changes"
-                  : "Add Transaction"}
+                {submitting
+                  ? "Saving..."
+                  : editingId !== null
+                    ? "Save Changes"
+                    : "Add Transaction"}
               </button>
             </div>
           </form>
@@ -316,9 +495,17 @@ function Transactions() {
             setTypeFilter(event.target.value)
           }
         >
-          <option value="all">All Types</option>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
+          <option value="all">
+            All Types
+          </option>
+
+          <option value="income">
+            Income
+          </option>
+
+          <option value="expense">
+            Expense
+          </option>
         </select>
 
         <select
@@ -327,15 +514,33 @@ function Transactions() {
             setCategoryFilter(event.target.value)
           }
         >
-          <option value="all">All Categories</option>
-          <option value="food">Food</option>
-          <option value="bills">Bills</option>
-          <option value="transport">Transport</option>
-          <option value="shopping">Shopping</option>
+          <option value="all">
+            All Categories
+          </option>
+
+          <option value="food">
+            Food
+          </option>
+
+          <option value="bills">
+            Bills
+          </option>
+
+          <option value="transport">
+            Transport
+          </option>
+
+          <option value="shopping">
+            Shopping
+          </option>
+
           <option value="entertainment">
             Entertainment
           </option>
-          <option value="income">Income</option>
+
+          <option value="income">
+            Income
+          </option>
         </select>
       </div>
 
@@ -350,34 +555,92 @@ function Transactions() {
             <span>Action</span>
           </div>
 
-          {filteredTransactions.map((transaction) => (
-            <div
-              className="transaction-row"
-              key={transaction.id}
-            >
-              <span>{transaction.date}</span>
-
-              <span>{transaction.description}</span>
-
-              <span>{transaction.category}</span>
-
-              <span>{transaction.type}</span>
-
+          {loading && (
+            <div className="transaction-row">
               <span>
-                Rp{" "}
-                {transaction.amount.toLocaleString("id-ID")}
-              </span>
-
-              <span>
-                <button
-                  type="button"
-                  onClick={() => handleEdit(transaction)}
-                >
-                  Edit
-                </button>
+                Loading...
               </span>
             </div>
-          ))}
+          )}
+
+          {!loading &&
+            filteredTransactions.length === 0 && (
+              <div className="transaction-row">
+                <span>
+                  No transactions found.
+                </span>
+              </div>
+            )}
+
+          {!loading &&
+            filteredTransactions.map(
+              (transaction) => {
+                const isIncome =
+                  transaction.type.toLowerCase() ===
+                  "income"
+
+                return (
+                  <div
+                    className="transaction-row"
+                    key={transaction.id}
+                  >
+                    <span>
+                      {transaction.created_at
+                        ? transaction.created_at.slice(
+                            0,
+                            10
+                          )
+                        : "-"}
+                    </span>
+
+                    <span>
+                      {transaction.description}
+                    </span>
+
+                    <span>
+                      {transaction.category}
+                    </span>
+
+                    <span>
+                      {transaction.type}
+                    </span>
+
+                    <span>
+                      {isIncome ? "+" : "-"} Rp{" "}
+                      {Number(
+                        transaction.amount
+                      ).toLocaleString(
+                        "id-ID"
+                      )}
+                    </span>
+
+                    <span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleEdit(
+                            transaction
+                          )
+                        }
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleDelete(
+                            transaction.id
+                          )
+                        }
+                      >
+                        Delete
+                      </button>
+                    </span>
+                  </div>
+                )
+              }
+            )}
         </div>
       </div>
     </div>

@@ -738,4 +738,4 @@ The long-term goal is to build a complete, reliable, and professional personal f
 
 ## License
 
-This project is currently developed as a personal learning and portfolio project.
+This project is currently developed as a personal learning and portfolio project.`

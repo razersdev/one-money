@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react"
+import api from "../services/api"
+
 import {
   ResponsiveContainer,
   AreaChart,
@@ -12,22 +15,6 @@ import {
   Legend,
 } from "recharts"
 
-const chartData = [
-  { month: "Jan", income: 4500000, expense: 1800000 },
-  { month: "Feb", income: 5200000, expense: 2100000 },
-  { month: "Mar", income: 4800000, expense: 1700000 },
-  { month: "Apr", income: 6100000, expense: 2300000 },
-  { month: "May", income: 5700000, expense: 1900000 },
-  { month: "Jun", income: 7000000, expense: 1750000 },
-]
-
-const expenseCategoryData = [
-  { name: "Food", value: 35 },
-  { name: "Transport", value: 20 },
-  { name: "Bills", value: 18 },
-  { name: "Shopping", value: 15 },
-  { name: "Other", value: 12 },
-]
 
 const categoryColors = [
   "#2563eb",
@@ -37,84 +24,240 @@ const categoryColors = [
   "#64748b",
 ]
 
-const recentTransactions = [
-  {
-    id: 1,
-    title: "Monthly Salary",
-    type: "Income",
-    date: "Jun 28, 2026",
-    amount: 7000000,
-  },
-  {
-    id: 2,
-    title: "Food & Drinks",
-    type: "Expense",
-    date: "Jun 27, 2026",
-    amount: 75000,
-  },
-  {
-    id: 3,
-    title: "Transportation",
-    type: "Expense",
-    date: "Jun 26, 2026",
-    amount: 50000,
-  },
-]
 
 function Dashboard() {
+  const [dashboardData, setDashboardData] = useState({
+    total_income: 0,
+    total_expense: 0,
+    balance: 0,
+    expense_by_category: {},
+    financial_overview: [],
+  })
+
+  const [recentTransactions, setRecentTransactions] = useState([])
+
+  const [loading, setLoading] = useState(true)
+
+  const [error, setError] = useState("")
+
+
+  useEffect(() => {
+    async function fetchDashboard() {
+      try {
+        setLoading(true)
+        setError("")
+
+        const response = await api.get("/dashboard")
+
+        console.log(
+          "Dashboard response:",
+          response.data
+        )
+
+        setDashboardData(response.data.data)
+
+      } catch (error) {
+        console.error(
+          "Dashboard request failed:",
+          error
+        )
+
+        if (error.response) {
+          const detail =
+            error.response.data?.detail
+
+          if (typeof detail === "string") {
+            setError(detail)
+          } else {
+            setError(
+              "Failed to load dashboard."
+            )
+          }
+        } else {
+          setError(
+            "Unable to connect to the server."
+          )
+        }
+      } finally {
+        setLoading(false)
+      }
+    }
+
+
+    async function fetchRecentTransactions() {
+      try {
+        const response = await api.get(
+          "/transactions"
+        )
+
+        console.log(
+          "Transactions response:",
+          response.data
+        )
+
+        const transactions =
+          response.data.data || []
+
+        setRecentTransactions(
+          transactions.slice(0, 3)
+        )
+
+      } catch (error) {
+        console.error(
+          "Transactions request failed:",
+          error
+        )
+      }
+    }
+
+
+    fetchDashboard()
+    fetchRecentTransactions()
+
+  }, [])
+
+
+  const expenseCategoryData =
+    Object.entries(
+      dashboardData.expense_by_category
+    ).map(([name, value]) => ({
+      name,
+      value,
+    }))
+
+
   return (
     <section className="dashboard">
-      {/* Dashboard Header */}
-      <div className="dashboard-header">
-        <div>
-          <p className="dashboard-eyebrow">Overview</p>
 
-          <h1>Dashboard</h1>
+      {/* Dashboard Header */}
+
+      <div className="dashboard-header">
+
+        <div>
+
+          <p className="dashboard-eyebrow">
+            Overview
+          </p>
+
+          <h1>
+            Dashboard
+          </h1>
 
           <p className="dashboard-subtitle">
             Here's your financial overview.
           </p>
+
         </div>
+
 
         <button className="dashboard-action">
           Add Transaction
         </button>
+
       </div>
+
+
+      {/* Error */}
+
+      {error && (
+        <div
+          className="auth-error"
+          role="alert"
+        >
+          {error}
+        </div>
+      )}
+
 
       {/* Summary Cards */}
+
       <div className="summary-grid">
+
         <article className="summary-card summary-card-balance">
-          <p className="summary-label">Total Balance</p>
-          <h2>Rp 5.250.000</h2>
+
+          <p className="summary-label">
+            Total Balance
+          </p>
+
+          <h2>
+            {loading
+              ? "Loading..."
+              : `Rp ${Number(
+                  dashboardData.balance
+                ).toLocaleString("id-ID")}`}
+          </h2>
+
         </article>
+
 
         <article className="summary-card summary-card-income">
-          <p className="summary-label">Income</p>
-          <h2>Rp 7.000.000</h2>
+
+          <p className="summary-label">
+            Income
+          </p>
+
+          <h2>
+            {loading
+              ? "Loading..."
+              : `Rp ${Number(
+                  dashboardData.total_income
+                ).toLocaleString("id-ID")}`}
+          </h2>
+
         </article>
+
 
         <article className="summary-card summary-card-expense">
-          <p className="summary-label">Expense</p>
-          <h2>Rp 1.750.000</h2>
+
+          <p className="summary-label">
+            Expense
+          </p>
+
+          <h2>
+            {loading
+              ? "Loading..."
+              : `Rp ${Number(
+                  dashboardData.total_expense
+                ).toLocaleString("id-ID")}`}
+          </h2>
+
         </article>
+
       </div>
 
+
       {/* Financial Overview */}
+
       <div className="chart-card">
+
         <div className="chart-header">
+
           <div>
-            <h2>Financial Overview</h2>
+
+            <h2>
+              Financial Overview
+            </h2>
 
             <p>
               Income and expenses over the last 6 months.
             </p>
+
           </div>
+
         </div>
 
+
         <div className="chart-container">
-          <ResponsiveContainer width="100%" height="100%">
+
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+          >
+
             <AreaChart
-              data={chartData}
+              data={
+                dashboardData.financial_overview
+              }
               margin={{
                 top: 10,
                 right: 10,
@@ -122,6 +265,7 @@ function Dashboard() {
                 bottom: 0,
               }}
             >
+
               <CartesianGrid
                 strokeDasharray="3 3"
                 vertical={false}
@@ -143,9 +287,14 @@ function Dashboard() {
 
               <Tooltip
                 formatter={(value) =>
-                  `Rp ${Number(value).toLocaleString("id-ID")}`
+                  `Rp ${Number(
+                    value
+                  ).toLocaleString(
+                    "id-ID"
+                  )}`
                 }
               />
+
 
               <Area
                 type="monotone"
@@ -157,6 +306,7 @@ function Dashboard() {
                 strokeWidth={2}
               />
 
+
               <Area
                 type="monotone"
                 dataKey="expense"
@@ -166,26 +316,46 @@ function Dashboard() {
                 fillOpacity={0.06}
                 strokeWidth={2}
               />
+
             </AreaChart>
+
           </ResponsiveContainer>
+
         </div>
+
       </div>
 
+
       {/* Expense by Category */}
+
       <div className="category-card">
+
         <div className="category-header">
+
           <div>
-            <h2>Expense by Category</h2>
+
+            <h2>
+              Expense by Category
+            </h2>
 
             <p>
               Distribution of your expenses by category.
             </p>
+
           </div>
+
         </div>
 
+
         <div className="category-chart-container">
-          <ResponsiveContainer width="100%" height="100%">
+
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+          >
+
             <PieChart>
+
               <Pie
                 data={expenseCategoryData}
                 dataKey="value"
@@ -196,73 +366,153 @@ function Dashboard() {
                 outerRadius={115}
                 paddingAngle={2}
               >
-                {expenseCategoryData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${entry.name}`}
-                    fill={categoryColors[index]}
-                  />
-                ))}
+
+                {expenseCategoryData.map(
+                  (entry, index) => (
+                    <Cell
+                      key={`cell-${entry.name}`}
+                      fill={
+                        categoryColors[
+                          index %
+                          categoryColors.length
+                        ]
+                      }
+                    />
+                  )
+                )}
+
               </Pie>
 
+
               <Tooltip
-                formatter={(value) => `${value}%`}
+                formatter={(value) =>
+                  `Rp ${Number(
+                    value
+                  ).toLocaleString(
+                    "id-ID"
+                  )}`
+                }
               />
+
 
               <Legend
                 verticalAlign="bottom"
                 height={36}
               />
+
             </PieChart>
+
           </ResponsiveContainer>
+
         </div>
+
       </div>
 
+
       {/* Recent Transactions */}
+
       <div className="transactions-card">
+
         <div className="transactions-header">
+
           <div>
-            <h2>Recent Transactions</h2>
+
+            <h2>
+              Recent Transactions
+            </h2>
 
             <p>
               Your latest financial activity.
             </p>
+
           </div>
+
 
           <button className="view-all-button">
             View All
           </button>
+
         </div>
+
 
         <div className="transaction-list">
-          {recentTransactions.map((transaction) => (
-            <div
-              className="transaction-item"
-              key={transaction.id}
-            >
-              <div>
-                <h3>{transaction.title}</h3>
 
-                <p>
-                  {transaction.type} · {transaction.date}
-                </p>
-              </div>
+          {recentTransactions.length === 0 ? (
 
-              <span
-                className={
-                  transaction.type === "Income"
-                    ? "transaction-income"
-                    : "transaction-expense"
-                }
-              >
-                {transaction.type === "Income" ? "+" : "-"} Rp{" "}
-                {transaction.amount.toLocaleString("id-ID")}
-              </span>
-            </div>
-          ))}
+            <p>
+              No transactions yet.
+            </p>
+
+          ) : (
+
+            recentTransactions.map(
+              (transaction) => {
+
+                const isIncome =
+                  transaction.type.toLowerCase() ===
+                  "income"
+
+                return (
+
+                  <div
+                    className="transaction-item"
+                    key={transaction.id}
+                  >
+
+                    <div>
+
+                      <h3>
+                        {transaction.description}
+                      </h3>
+
+                      <p>
+                        {isIncome
+                          ? "Income"
+                          : "Expense"}{" "}
+                        ·{" "}
+                        {transaction.category}
+                      </p>
+
+                    </div>
+
+
+                    <span
+                      className={
+                        isIncome
+                          ? "transaction-income"
+                          : "transaction-expense"
+                      }
+                    >
+
+                      {isIncome
+                        ? "+"
+                        : "-"}{" "}
+
+                      Rp{" "}
+
+                      {Number(
+                        transaction.amount
+                      ).toLocaleString(
+                        "id-ID"
+                      )}
+
+                    </span>
+
+                  </div>
+
+                )
+              }
+            )
+
+          )}
+
         </div>
+
       </div>
+
     </section>
   )
 }
+
 
 export default Dashboard
