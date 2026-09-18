@@ -1,44 +1,55 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import api from "../services/api"
 
 function Categories() {
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState(null)
 
   const [searchTerm, setSearchTerm] = useState("")
-  const [typeFilter, setTypeFilter] = useState("all")
 
-  const [categories, setCategories] = useState([
-    {
-      id: 1,
-      name: "Food",
-      type: "Expense",
-    },
-    {
-      id: 2,
-      name: "Bills",
-      type: "Expense",
-    },
-    {
-      id: 3,
-      name: "Transport",
-      type: "Expense",
-    },
-    {
-      id: 4,
-      name: "Shopping",
-      type: "Expense",
-    },
-    {
-      id: 5,
-      name: "Salary",
-      type: "Income",
-    },
-  ])
+  const [categories, setCategories] = useState([])
 
   const [formData, setFormData] = useState({
     name: "",
-    type: "Expense",
   })
+
+  const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
+
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
+
+  // =========================
+  // GET CATEGORIES
+  // =========================
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true)
+      setError("")
+
+      const response = await api.get("/categories")
+
+      setCategories(response.data.data)
+    } catch (error) {
+      console.error(error)
+
+      setError(
+        error.response?.data?.detail ||
+          "Gagal mengambil data categories."
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  // =========================
+  // HANDLE INPUT
+  // =========================
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -49,93 +60,189 @@ function Categories() {
     }))
   }
 
+  // =========================
+  // RESET FORM
+  // =========================
+
   const resetForm = () => {
     setFormData({
       name: "",
-      type: "Expense",
     })
 
     setEditingId(null)
     setShowForm(false)
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-
-    if (editingId !== null) {
-      setCategories((previous) =>
-        previous.map((category) =>
-          category.id === editingId
-            ? {
-                ...category,
-                name: formData.name,
-                type: formData.type,
-              }
-            : category
-        )
-      )
-    } else {
-      const newCategory = {
-        id: Date.now(),
-        name: formData.name,
-        type: formData.type,
-      }
-
-      setCategories((previous) => [
-        ...previous,
-        newCategory,
-      ])
-    }
-
-    resetForm()
-  }
+  // =========================
+  // OPEN ADD FORM
+  // =========================
 
   const handleAddCategory = () => {
     setEditingId(null)
 
     setFormData({
       name: "",
-      type: "Expense",
     })
+
+    setError("")
+    setSuccess("")
 
     setShowForm(true)
   }
+
+  // =========================
+  // CREATE / UPDATE
+  // =========================
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+
+    if (!formData.name.trim()) {
+      setError("Category name tidak boleh kosong.")
+      return
+    }
+
+    try {
+      setSubmitting(true)
+      setError("")
+      setSuccess("")
+
+      if (editingId !== null) {
+        // UPDATE
+        const response = await api.put(
+          `/categories/${editingId}`,
+          {
+            name: formData.name.trim(),
+          }
+        )
+
+        const updatedCategory = response.data.data
+
+        setCategories((previous) =>
+          previous.map((category) =>
+            category.id === editingId
+              ? updatedCategory
+              : category
+          )
+        )
+
+        setSuccess("Category berhasil diperbarui.")
+      } else {
+        // CREATE
+        const response = await api.post(
+          "/categories",
+          {
+            name: formData.name.trim(),
+          }
+        )
+
+        const newCategory = response.data.data
+
+        setCategories((previous) => [
+          newCategory,
+          ...previous,
+        ])
+
+        setSuccess("Category berhasil ditambahkan.")
+      }
+
+      setFormData({
+        name: "",
+      })
+
+      setEditingId(null)
+      setShowForm(false)
+    } catch (error) {
+      console.error(error)
+
+      setError(
+        error.response?.data?.detail ||
+          "Gagal menyimpan category."
+      )
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  // =========================
+  // EDIT
+  // =========================
 
   const handleEdit = (category) => {
     setEditingId(category.id)
 
     setFormData({
       name: category.name,
-      type: category.type,
     })
+
+    setError("")
+    setSuccess("")
 
     setShowForm(true)
   }
 
-  const handleDelete = (id) => {
-    setCategories((previous) =>
-      previous.filter((category) => category.id !== id)
+  // =========================
+  // DELETE
+  // =========================
+
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm(
+      "Yakin ingin menghapus category ini?"
     )
+
+    if (!confirmed) {
+      return
+    }
+
+    try {
+      setError("")
+      setSuccess("")
+
+      await api.delete(`/categories/${id}`)
+
+      setCategories((previous) =>
+        previous.filter(
+          (category) => category.id !== id
+        )
+      )
+
+      setSuccess("Category berhasil dihapus.")
+    } catch (error) {
+      console.error(error)
+
+      setError(
+        error.response?.data?.detail ||
+          "Gagal menghapus category."
+      )
+    }
   }
 
-  const filteredCategories = categories.filter((category) => {
-    const matchesSearch = category.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+  // =========================
+  // FILTER
+  // =========================
 
-    const matchesType =
-      typeFilter === "all" ||
-      category.type.toLowerCase() === typeFilter
+  const filteredCategories = categories.filter(
+    (category) =>
+      category.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+  )
 
-    return matchesSearch && matchesType
-  })
+  // =========================
+  // RENDER
+  // =========================
 
   return (
     <div className="page">
+      {/* PAGE HEADER */}
+
       <div className="page-header">
         <div>
           <h1>Categories</h1>
-          <p>Manage your transaction categories.</p>
+
+          <p>
+            Manage your transaction categories.
+          </p>
         </div>
 
         <button
@@ -145,6 +252,42 @@ function Categories() {
           + Add Category
         </button>
       </div>
+
+      {/* SUCCESS MESSAGE */}
+
+      {success && (
+        <div
+          style={{
+            marginBottom: "16px",
+            padding: "12px 16px",
+            borderRadius: "8px",
+            background: "#ecfdf5",
+            color: "#047857",
+            border: "1px solid #a7f3d0",
+          }}
+        >
+          {success}
+        </div>
+      )}
+
+      {/* ERROR MESSAGE */}
+
+      {error && (
+        <div
+          style={{
+            marginBottom: "16px",
+            padding: "12px 16px",
+            borderRadius: "8px",
+            background: "#fef2f2",
+            color: "#b91c1c",
+            border: "1px solid #fecaca",
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+      {/* FORM */}
 
       {showForm && (
         <div className="transaction-form-card">
@@ -185,34 +328,15 @@ function Categories() {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                disabled={submitting}
               />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="type">
-                Type
-              </label>
-
-              <select
-                id="type"
-                name="type"
-                value={formData.type}
-                onChange={handleChange}
-              >
-                <option value="Expense">
-                  Expense
-                </option>
-
-                <option value="Income">
-                  Income
-                </option>
-              </select>
             </div>
 
             <div className="form-actions">
               <button
                 type="button"
                 onClick={resetForm}
+                disabled={submitting}
               >
                 Cancel
               </button>
@@ -220,15 +344,20 @@ function Categories() {
               <button
                 type="submit"
                 className="primary-button"
+                disabled={submitting}
               >
-                {editingId !== null
-                  ? "Save Changes"
-                  : "Add Category"}
+                {submitting
+                  ? "Saving..."
+                  : editingId !== null
+                    ? "Save Changes"
+                    : "Add Category"}
               </button>
             </div>
           </form>
         </div>
       )}
+
+      {/* SEARCH */}
 
       <div className="transaction-filters">
         <input
@@ -239,55 +368,73 @@ function Categories() {
             setSearchTerm(event.target.value)
           }
         />
-
-        <select
-          value={typeFilter}
-          onChange={(event) =>
-            setTypeFilter(event.target.value)
-          }
-        >
-          <option value="all">All Types</option>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
       </div>
+
+      {/* CATEGORY TABLE */}
 
       <div className="transaction-card">
         <div className="transaction-table">
           <div className="transaction-row transaction-header">
             <span>Category</span>
-            <span>Type</span>
             <span>Action</span>
           </div>
 
-          {filteredCategories.map((category) => (
+          {loading ? (
             <div
               className="transaction-row"
-              key={category.id}
+              style={{
+                justifyContent: "center",
+              }}
             >
-              <span>{category.name}</span>
-
-              <span>{category.type}</span>
-
               <span>
-                <button
-                  type="button"
-                  onClick={() => handleEdit(category)}
-                >
-                  Edit
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleDelete(category.id)
-                  }
-                >
-                  Delete
-                </button>
+                Loading categories...
               </span>
             </div>
-          ))}
+          ) : filteredCategories.length === 0 ? (
+            <div
+              className="transaction-row"
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              <span>
+                {searchTerm
+                  ? "Category tidak ditemukan."
+                  : "Belum ada category."}
+              </span>
+            </div>
+          ) : (
+            filteredCategories.map((category) => (
+              <div
+                className="transaction-row"
+                key={category.id}
+              >
+                <span>
+                  {category.name}
+                </span>
+
+                <span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleEdit(category)
+                    }
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleDelete(category.id)
+                    }
+                  >
+                    Delete
+                  </button>
+                </span>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
