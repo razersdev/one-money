@@ -8,6 +8,7 @@ import Categories from "./pages/Categories"
 import Budgets from "./pages/Budgets"
 import Reports from "./pages/Reports"
 import MainLayout from "./layouts/MainLayout"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 function App() {
   return (
@@ -31,40 +32,41 @@ function App() {
           element={<Register />}
         />
 
-        {/* Main Application */}
-        <Route element={<MainLayout />}>
+        {/* Protected Main Application */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
 
-          <Route
-            path="/dashboard"
-            element={<Dashboard />}
-          />
+            <Route
+              path="/dashboard"
+              element={<Dashboard />}
+            />
 
-          <Route
-            path="/transactions"
-            element={<Transactions />}
-          />
+            <Route
+              path="/transactions"
+              element={<Transactions />}
+            />
 
-          <Route
-            path="/categories"
-            element={<Categories />}
-          />
+            <Route
+              path="/categories"
+              element={<Categories />}
+            />
 
-          <Route
-            path="/budgets"
-            element={<Budgets />}
-          />
+            <Route
+              path="/budgets"
+              element={<Budgets />}
+            />
 
-          <Route
-            path="/reports"
-            element={<Reports />}
-          />
+            <Route
+              path="/reports"
+              element={<Reports />}
+            />
 
-          {/* Temporary Pages */}
-          <Route
-            path="/settings"
-            element={<div>Settings</div>}
-          />
+            <Route
+              path="/settings"
+              element={<div>Settings</div>}
+            />
 
+          </Route>
         </Route>
 
       </Routes>

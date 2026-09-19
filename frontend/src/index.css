@@ -2124,3 +2124,43 @@ button {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+/* =========================
+   Sidebar Logout
+========================= */
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.logout-button {
+  width: 100%;
+  padding: 11px 16px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+
+  background: transparent;
+  color: #6b7280;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.logout-button:active {
+  transform: translateY(1px);
+}

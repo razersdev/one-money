@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import api from "../services/api"
 
 import {
@@ -26,6 +27,8 @@ const categoryColors = [
 
 
 function Dashboard() {
+  const navigate = useNavigate()
+
   const [dashboardData, setDashboardData] = useState({
     total_income: 0,
     total_expense: 0,
@@ -150,7 +153,11 @@ function Dashboard() {
         </div>
 
 
-        <button className="dashboard-action">
+        <button
+          type="button"
+          className="dashboard-action"
+          onClick={() => navigate("/transactions")}
+        >
           Add Transaction
         </button>
 
@@ -428,7 +435,11 @@ function Dashboard() {
           </div>
 
 
-          <button className="view-all-button">
+          <button
+            type="button"
+            className="view-all-button"
+            onClick={() => navigate("/transactions")}
+          >
             View All
           </button>
 
