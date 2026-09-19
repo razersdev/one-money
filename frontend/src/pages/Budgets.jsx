@@ -151,6 +151,17 @@ function Budgets() {
   }
 
   // =========================
+  // EXPENSE CATEGORIES ONLY
+  // =========================
+
+  const expenseCategories =
+    categories.filter(
+      (category) =>
+        category.type?.toLowerCase() ===
+        "expense"
+    )
+
+  // =========================
   // HANDLE INPUT
   // =========================
 
@@ -219,6 +230,24 @@ function Budgets() {
       return
     }
 
+    const selectedCategory =
+      categories.find(
+        (category) =>
+          category.id ===
+          Number(formData.category_id)
+      )
+
+    if (
+      !selectedCategory ||
+      selectedCategory.type?.toLowerCase() !==
+        "expense"
+    ) {
+      setError(
+        "Budget hanya dapat dibuat untuk Expense category."
+      )
+      return
+    }
+
     const numericAmount =
       parseCurrency(
         formData.amount
@@ -242,6 +271,7 @@ function Budgets() {
       const payload = {
         category_id:
           Number(formData.category_id),
+
         amount:
           numericAmount,
       }
@@ -323,9 +353,10 @@ function Budgets() {
   // =========================
 
   const handleDelete = async (id) => {
-    const confirmed = window.confirm(
-      "Yakin ingin menghapus budget ini?"
-    )
+    const confirmed =
+      window.confirm(
+        "Yakin ingin menghapus budget ini?"
+      )
 
     if (!confirmed) {
       return
@@ -504,7 +535,7 @@ function Budgets() {
                   Select Category
                 </option>
 
-                {categories.map(
+                {expenseCategories.map(
                   (category) => (
                     <option
                       key={category.id}

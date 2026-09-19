@@ -6,7 +6,10 @@ def init_db():
 
     cursor = connection.cursor()
 
-    # Tabel users
+    # =========================
+    # TABEL USERS
+    # =========================
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,7 +19,10 @@ def init_db():
         )
     """)
 
-    # Tabel categories
+    # =========================
+    # TABEL CATEGORIES
+    # =========================
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS categories (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,7 +33,23 @@ def init_db():
         )
     """)
 
-    # Tabel budgets
+    # =========================
+    # CATEGORY TYPE MIGRATION
+    # =========================
+
+    try:
+        cursor.execute("""
+            ALTER TABLE categories
+            ADD COLUMN type TEXT NOT NULL DEFAULT 'expense'
+        """)
+    except sqlite3.OperationalError:
+        # Kolom type sudah ada
+        pass
+
+    # =========================
+    # TABEL BUDGETS
+    # =========================
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS budgets (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,7 +62,10 @@ def init_db():
         )
     """)
 
-    # Tabel transactions
+    # =========================
+    # TABEL TRANSACTIONS
+    # =========================
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS transactions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,

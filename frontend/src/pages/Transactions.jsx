@@ -50,7 +50,8 @@ function Transactions() {
       )
 
       if (error.response) {
-        const detail = error.response.data?.detail
+        const detail =
+          error.response.data?.detail
 
         if (typeof detail === "string") {
           setError(detail)
@@ -75,14 +76,17 @@ function Transactions() {
 
   const fetchCategories = async () => {
     try {
-      const response = await api.get("/categories")
+      const response =
+        await api.get("/categories")
 
       console.log(
         "Categories response:",
         response.data
       )
 
-      setCategories(response.data.data || [])
+      setCategories(
+        response.data.data || []
+      )
     } catch (error) {
       console.error(
         "Categories request failed:",
@@ -90,7 +94,8 @@ function Transactions() {
       )
 
       if (error.response) {
-        const detail = error.response.data?.detail
+        const detail =
+          error.response.data?.detail
 
         if (typeof detail === "string") {
           setError(detail)
@@ -140,11 +145,29 @@ function Transactions() {
   }
 
   // =========================
+  // GET CATEGORIES BY TYPE
+  // =========================
+
+  const getCategoriesByType = () => {
+    const selectedType =
+      formData.type.toLowerCase()
+
+    return categories.filter(
+      (category) =>
+        category.type === selectedType
+    )
+  }
+
+  // =========================
   // HANDLE INPUT
   // =========================
 
   const handleChange = (event) => {
     const { name, value } = event.target
+
+    // =========================
+    // AMOUNT
+    // =========================
 
     if (name === "amount") {
       setFormData((previous) => ({
@@ -155,6 +178,41 @@ function Transactions() {
 
       return
     }
+
+    // =========================
+    // TYPE
+    // =========================
+
+    if (name === "type") {
+      const selectedType =
+        value.toLowerCase()
+
+      const currentCategory =
+        categories.find(
+          (category) =>
+            category.name ===
+            formData.category
+        )
+
+      const categoryStillValid =
+        currentCategory?.type ===
+        selectedType
+
+      setFormData((previous) => ({
+        ...previous,
+        type: value,
+        category:
+          categoryStillValid
+            ? previous.category
+            : "",
+      }))
+
+      return
+    }
+
+    // =========================
+    // OTHER INPUT
+    // =========================
 
     setFormData((previous) => ({
       ...previous,
@@ -239,6 +297,24 @@ function Transactions() {
       return
     }
 
+    const selectedCategory =
+      categories.find(
+        (category) =>
+          category.name ===
+          formData.category
+      )
+
+    if (
+      !selectedCategory ||
+      selectedCategory.type !==
+        formData.type.toLowerCase()
+    ) {
+      setError(
+        "Category tidak sesuai dengan transaction type."
+      )
+      return
+    }
+
     try {
       setSubmitting(true)
       setError("")
@@ -286,22 +362,23 @@ function Transactions() {
       // CREATE
       // =========================
 
-      const response = await api.post(
-        "/transactions",
-        {
-          type:
-            formData.type.toLowerCase(),
+      const response =
+        await api.post(
+          "/transactions",
+          {
+            type:
+              formData.type.toLowerCase(),
 
-          amount:
-            numericAmount,
+            amount:
+              numericAmount,
 
-          description:
-            formData.description.trim(),
+            description:
+              formData.description.trim(),
 
-          category:
-            formData.category,
-        }
-      )
+            category:
+              formData.category,
+          }
+        )
 
       console.log(
         "Create transaction response:",
@@ -463,6 +540,7 @@ function Transactions() {
   const filteredTransactions =
     transactions.filter(
       (transaction) => {
+
         const matchesSearch =
           transaction.description
             .toLowerCase()
@@ -574,8 +652,12 @@ function Transactions() {
 
             <button
               type="button"
-              onClick={resetForm}
-              disabled={submitting}
+              onClick={
+                resetForm
+              }
+              disabled={
+                submitting
+              }
             >
               ×
             </button>
@@ -583,7 +665,11 @@ function Transactions() {
           </div>
 
 
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={
+              handleSubmit
+            }
+          >
 
             {/* DESCRIPTION */}
 
@@ -601,9 +687,13 @@ function Transactions() {
                 value={
                   formData.description
                 }
-                onChange={handleChange}
+                onChange={
+                  handleChange
+                }
                 required
-                disabled={submitting}
+                disabled={
+                  submitting
+                }
               />
 
             </div>
@@ -626,9 +716,13 @@ function Transactions() {
                 value={
                   formData.amount
                 }
-                onChange={handleChange}
+                onChange={
+                  handleChange
+                }
                 required
-                disabled={submitting}
+                disabled={
+                  submitting
+                }
               />
 
             </div>
@@ -648,8 +742,12 @@ function Transactions() {
                 value={
                   formData.type
                 }
-                onChange={handleChange}
-                disabled={submitting}
+                onChange={
+                  handleChange
+                }
+                disabled={
+                  submitting
+                }
               >
 
                 <option value="Expense">
@@ -679,24 +777,32 @@ function Transactions() {
                 value={
                   formData.category
                 }
-                onChange={handleChange}
+                onChange={
+                  handleChange
+                }
                 required
-                disabled={submitting}
+                disabled={
+                  submitting
+                }
               >
 
                 <option value="">
                   Select Category
                 </option>
 
-                {categories.map(
+                {getCategoriesByType().map(
                   (category) => (
                     <option
-                      key={category.id}
+                      key={
+                        category.id
+                      }
                       value={
                         category.name
                       }
                     >
-                      {category.name}
+                      {
+                        category.name
+                      }
                     </option>
                   )
                 )}
@@ -721,9 +827,13 @@ function Transactions() {
                 value={
                   formData.date
                 }
-                onChange={handleChange}
+                onChange={
+                  handleChange
+                }
                 required
-                disabled={submitting}
+                disabled={
+                  submitting
+                }
               />
 
             </div>
@@ -735,8 +845,12 @@ function Transactions() {
 
               <button
                 type="button"
-                onClick={resetForm}
-                disabled={submitting}
+                onClick={
+                  resetForm
+                }
+                disabled={
+                  submitting
+                }
               >
                 Cancel
               </button>
@@ -744,7 +858,9 @@ function Transactions() {
               <button
                 type="submit"
                 className="primary-button"
-                disabled={submitting}
+                disabled={
+                  submitting
+                }
               >
                 {submitting
                   ? "Saving..."
@@ -771,10 +887,11 @@ function Transactions() {
           value={
             searchQuery
           }
-          onChange={(event) =>
-            setSearchQuery(
-              event.target.value
-            )
+          onChange={
+            (event) =>
+              setSearchQuery(
+                event.target.value
+              )
           }
         />
 
@@ -782,10 +899,11 @@ function Transactions() {
           value={
             typeFilter
           }
-          onChange={(event) =>
-            setTypeFilter(
-              event.target.value
-            )
+          onChange={
+            (event) =>
+              setTypeFilter(
+                event.target.value
+              )
           }
         >
 
@@ -807,10 +925,11 @@ function Transactions() {
           value={
             categoryFilter
           }
-          onChange={(event) =>
-            setCategoryFilter(
-              event.target.value
-            )
+          onChange={
+            (event) =>
+              setCategoryFilter(
+                event.target.value
+              )
           }
         >
 
@@ -821,12 +940,16 @@ function Transactions() {
           {categories.map(
             (category) => (
               <option
-                key={category.id}
+                key={
+                  category.id
+                }
                 value={
                   category.name.toLowerCase()
                 }
               >
-                {category.name}
+                {
+                  category.name
+                }
               </option>
             )
           )}

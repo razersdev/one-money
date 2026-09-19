@@ -11,13 +11,15 @@ def create_category(user_id: int, category: CategoryCreate):
         """
         INSERT INTO categories (
             user_id,
-            name
+            name,
+            type
         )
-        VALUES (?, ?)
+        VALUES (?, ?, ?)
         """,
         (
             user_id,
-            category.name
+            category.name,
+            category.type
         )
     )
 
@@ -30,7 +32,8 @@ def create_category(user_id: int, category: CategoryCreate):
     return {
         "id": category_id,
         "user_id": user_id,
-        "name": category.name
+        "name": category.name,
+        "type": category.type
     }
 
 
@@ -44,7 +47,8 @@ def get_categories(user_id: int):
         SELECT
             id,
             user_id,
-            name
+            name,
+            type
         FROM categories
         WHERE user_id = ?
         ORDER BY id DESC
@@ -62,7 +66,8 @@ def get_categories(user_id: int):
         result.append({
             "id": category[0],
             "user_id": category[1],
-            "name": category[2]
+            "name": category[2],
+            "type": category[3]
         })
 
     return result
@@ -80,12 +85,15 @@ def update_category(
     cursor.execute(
         """
         UPDATE categories
-        SET name = ?
+        SET
+            name = ?,
+            type = ?
         WHERE id = ?
         AND user_id = ?
         """,
         (
             category.name,
+            category.type,
             category_id,
             user_id
         )
@@ -102,7 +110,8 @@ def update_category(
     return {
         "id": category_id,
         "user_id": user_id,
-        "name": category.name
+        "name": category.name,
+        "type": category.type
     }
 
 
